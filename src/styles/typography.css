@@ -1,0 +1,69 @@
+/* Typography System */
+
+.text-serif {
+  font-family: var(--font-serif);
+}
+
+.text-sans {
+  font-family: var(--font-sans);
+}
+
+.text-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-stone);
+}
+
+.text-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-ivory);
+  line-height: 1.1;
+}
+
+.text-body {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-stone);
+  line-height: 1.6;
+}
+
+.text-cta {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-champagne);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.text-cta::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-champagne);
+  transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.text-cta:hover::after,
+.text-cta:focus::after {
+  width: 100%;
+}
+
+.text-cta:focus-visible {
+  outline: 1px solid var(--color-champagne);
+  outline-offset: 4px;
+}
