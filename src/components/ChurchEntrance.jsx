@@ -12,38 +12,44 @@ export default function ChurchEntrance() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const inner = sectionRef.current.querySelector('.entrance-inner');
       const door = sectionRef.current.querySelector('.entrance-door');
-      const glow = sectionRef.current.querySelector('.entrance-glow');
-      const vignette = sectionRef.current.querySelector('.entrance-vignette');
-      const fade = sectionRef.current.querySelector('.entrance-fade');
+      const doorGlow = sectionRef.current.querySelector('.entrance-glow');
+      const inner = sectionRef.current.querySelector('.entrance-inner');
+      const darkOverlay = sectionRef.current.querySelector('.entrance-dark-overlay');
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-          pin: inner,
-        },
+      const mm = gsap.matchMedia();
+
+      mm.add({
+        isMobile: "(max-width: 768px)",
+        isDesktop: "(min-width: 769px)"
+      }, (context) => {
+        const { isMobile } = context.conditions;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+            pin: inner,
+          },
+        });
+
+        // Door scale up dramatically
+        // Faster pacing on mobile
+        tl.fromTo(
+          door,
+          { width: isMobile ? '20vw' : '15vw', height: isMobile ? '35vh' : '30vh' },
+          { width: '200vw', height: '200vh', ease: 'power2.in' },
+          0
+        );
+
+        // Glow increases
+        tl.to(doorGlow, { opacity: 1, ease: 'power1.in' }, 0);
+
+        // Fade to complete darkness right at the end
+        tl.to(darkOverlay, { opacity: 1, ease: 'power2.in' }, 0.8);
       });
-
-      // Door scales up - walking toward it
-      tl.fromTo(
-        door,
-        { scale: 1, opacity: 1 },
-        { scale: 8, opacity: 1, ease: 'power1.in' },
-        0
-      );
-
-      // Glow intensifies
-      tl.fromTo(glow, { opacity: 0.15 }, { opacity: 0.6 }, 0);
-
-      // Vignette darkens
-      tl.fromTo(vignette, { opacity: 0.3 }, { opacity: 0.9 }, 0.3);
-
-      // Final fade to black
-      tl.fromTo(fade, { opacity: 0 }, { opacity: 1 }, 0.7);
     }, sectionRef);
 
     return () => ctx.revert();
@@ -54,10 +60,18 @@ export default function ChurchEntrance() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '250vh',
+        height: 'var(--entrance-height, 250vh)',
         background: '#0B0A09',
+        overflow: 'hidden',
       }}
     >
+      <style>{`
+        @media (max-width: 768px) {
+          section {
+            --entrance-height: 120svh;
+          }
+        }
+      `}</style>
       <div
         className="entrance-inner"
         style={{
@@ -68,59 +82,39 @@ export default function ChurchEntrance() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          overflow: 'hidden',
           background: '#0B0A09',
         }}
       >
-        {/* Door opening */}
         <div
           className="entrance-door"
           style={{
             position: 'relative',
-            width: '15vw',
-            minWidth: '60px',
-            height: '35vh',
-            background: 'linear-gradient(180deg, rgba(244, 239, 230, 0.06) 0%, rgba(199, 166, 106, 0.04) 100%)',
-            borderRadius: '50% 50% 0 0 / 20% 20% 0 0',
-            border: '1px solid rgba(199, 166, 106, 0.08)',
-            borderBottom: 'none',
-            zIndex: 2,
+            background: '#F4EFE6',
+            boxShadow: '0 0 30px rgba(199, 166, 106, 0.1)',
+            overflow: 'hidden',
+            borderRadius: '2px',
           }}
         >
-          {/* Inner glow */}
+          {/* Inner warm glow */}
           <div
             className="entrance-glow"
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(ellipse at 50% 60%, rgba(199, 166, 106, 0.15) 0%, transparent 70%)',
-              borderRadius: 'inherit',
+              background: 'radial-gradient(circle at center, rgba(199, 166, 106, 0.4) 0%, transparent 80%)',
+              opacity: 0.2,
             }}
           />
         </div>
 
-        {/* Vignette overlay */}
         <div
-          className="entrance-vignette"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'radial-gradient(ellipse at center, transparent 20%, #0B0A09 80%)',
-            zIndex: 3,
-            pointerEvents: 'none',
-          }}
-        />
-
-        {/* Final fade to black */}
-        <div
-          className="entrance-fade"
+          className="entrance-dark-overlay"
           style={{
             position: 'absolute',
             inset: 0,
             background: '#0B0A09',
-            zIndex: 4,
-            pointerEvents: 'none',
             opacity: 0,
+            pointerEvents: 'none',
           }}
         />
       </div>
