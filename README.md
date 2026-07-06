@@ -1,16 +1,49 @@
-# React + Vite
+# Beshoy & Doris — Cinematic Wedding Invitation
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A cinematic, highly interactive, scroll-driven digital wedding invitation for Beshoy & Doris.
 
-Currently, two official plugins are available:
+## Event Details
+- **Date:** 14 November 2026
+- **Time:** 5:00 PM
+- **Ceremony:** Church of Archangel Michael, Sheraton
+- **Reception:** La Pensée, Gardenia
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
+- **Framework:** React + Vite
+- **Animations:** GSAP (ScrollTrigger)
+- **Smooth Scrolling:** Lenis
+- **Styling:** Vanilla CSS (mobile-first, responsive)
 
-## React Compiler
+## Local Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+# Install dependencies
+npm install
 
-## Expanding the Oxlint configuration
+# Start local development server
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Production Build
+
+```bash
+# Build for production
+npm run build
+```
+The production files will be output to the `dist/` directory.
+
+## Project Architecture
+- `src/components/`: Cinematic sections (Preloader, Opening, Names, Ceremony, Reception, Date, Countdown, PhotoStory, FinalFrame)
+- `src/config/eventConfig.js`: Centralized event data (names, dates, locations, photos)
+- `src/hooks/useLenis.js`: GSAP-integrated smooth scroll setup
+- `src/styles/`: Global CSS and typography design system
+- `src/utils/calendar.js`: Client-side `.ics` generator for "Add to Calendar"
+
+## Asset Replacement Instructions
+- **Couple Photos**: Add new photos to `src/assets/couple/`. Then, register them in the `couplePhotos` array within `src/config/eventConfig.js`. The `PhotoStory` component will automatically adapt its layout mode based on the number of photos provided.
+- **Church & Reception Photos**: Replace the CSS placeholders by adding real photos to `src/assets/church/` and `src/assets/reception/`, then updating the respective components (`CeremonyScene.jsx` and `ReceptionScene.jsx`).
+- **Metadata**: Update `public/og-image.jpg` and `public/favicon.svg` for social sharing.
+
+## Deployment
+This project is optimized for deployment on Cloudflare Pages.
+Connect this repository to Cloudflare Pages and use `npm run build` as the build command with `dist` as the output directory.
