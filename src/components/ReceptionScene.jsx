@@ -16,31 +16,31 @@ export default function ReceptionScene() {
       const textEls = sectionRef.current.querySelectorAll('.rec-text');
       const orbs = sectionRef.current.querySelectorAll('.rec-orb');
 
-      // Floating ambient lights — slow breathing
+      // Floating ambient lights (rose/blush) — slow breathing
       orbs.forEach((orb, i) => {
         gsap.to(orb, {
-          x: `${(i % 2 === 0 ? 1 : -1) * 25}%`,
-          y: `${(i % 2 === 0 ? -1 : 1) * 15}%`,
-          duration: 10 + i * 3,
+          x: `${(i % 2 === 0 ? 1 : -1) * 20}%`,
+          y: `${(i % 2 === 0 ? -1 : 1) * 12}%`,
+          duration: 12 + i * 3,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
         });
       });
 
-      // Staggered entry on scroll
+      // Fast reveal
       gsap.fromTo(textEls,
-        { opacity: 0, y: 25, filter: 'blur(3px)' },
+        { opacity: 0, y: 20, filter: 'blur(3px)' },
         {
           opacity: 1,
           y: 0,
           filter: 'blur(0px)',
-          stagger: 0.12,
-          duration: 0.9,
+          stagger: 0.08,
+          duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top 85%',
             toggleActions: 'play none none none',
           },
         }
@@ -55,8 +55,8 @@ export default function ReceptionScene() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '100dvh',
-        background: '#161210',
+        minHeight: '80svh', // Highly compressed
+        background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -65,23 +65,23 @@ export default function ReceptionScene() {
         overflow: 'hidden',
       }}
     >
-      {/* Warm ambient orbs — warmer than ceremony */}
+      {/* Blush ambient orbs */}
       <div className="rec-orb" style={{
         position: 'absolute', top: '15%', left: '5%',
         width: '55vw', height: '55vw',
-        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.1) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(232, 200, 200, 0.2) 0%, transparent 65%)',
         filter: 'blur(50px)', pointerEvents: 'none',
       }} />
       <div className="rec-orb" style={{
         position: 'absolute', bottom: '10%', right: '5%',
         width: '50vw', height: '50vw',
-        background: 'radial-gradient(circle, rgba(166, 158, 148, 0.08) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(199, 154, 139, 0.15) 0%, transparent 65%)',
         filter: 'blur(40px)', pointerEvents: 'none',
       }} />
       <div className="rec-orb" style={{
         position: 'absolute', top: '50%', left: '40%',
         width: '30vw', height: '30vw',
-        background: 'radial-gradient(circle, rgba(212, 184, 122, 0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.1) 0%, transparent 70%)',
         filter: 'blur(35px)', pointerEvents: 'none',
       }} />
 
@@ -92,7 +92,7 @@ export default function ReceptionScene() {
             fontSize: '0.6rem',
             letterSpacing: '0.35em',
             textTransform: 'uppercase',
-            color: '#8F857B',
+            color: '#8F7D78',
           }}>
             The Reception
           </span>
@@ -104,7 +104,7 @@ export default function ReceptionScene() {
             fontStyle: 'italic',
             fontWeight: 400,
             fontSize: 'clamp(2.2rem, 9vw, 4.5rem)',
-            color: '#F2ECE2',
+            color: '#4F3E39', // Dark luxury text
             lineHeight: 1.05,
           }}>
             {eventConfig.reception.name}
@@ -112,7 +112,7 @@ export default function ReceptionScene() {
           <p style={{
             fontFamily: "'Manrope', sans-serif",
             fontSize: '0.7rem',
-            color: '#8F857B',
+            color: '#8F7D78',
             marginTop: '0.5em',
             letterSpacing: '0.1em',
           }}>
@@ -124,9 +124,9 @@ export default function ReceptionScene() {
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: 'clamp(1rem, 3vw, 1.3rem)',
-            color: '#D6B57A',
+            fontWeight: 400,
+            fontSize: 'clamp(1.1rem, 3.5vw, 1.4rem)',
+            color: '#C79A8B', // Blush accent
           }}>
             Dinner. Music. Memories.
           </p>
@@ -143,21 +143,21 @@ export default function ReceptionScene() {
               <span style={{
                 fontFamily: "'Manrope', sans-serif",
                 fontSize: '0.6rem',
-                fontWeight: 400,
+                fontWeight: 500,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
-                color: '#D6B57A',
+                color: '#6A5148',
               }}>
                 Open Reception Location
               </span>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#D6B57A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6A5148" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
               </svg>
             </div>
             <span dir="rtl" lang="ar" style={{
               fontFamily: "'Amiri', serif",
               fontSize: '0.75rem',
-              color: '#8F857B',
+              color: '#8F7D78',
               marginTop: '0.25em',
             }}>
               الموقع على الخريطة

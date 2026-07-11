@@ -10,7 +10,7 @@ function PhotoImage({ photo, className, style }) {
   return (
     <div className={className} style={{ overflow: 'hidden', ...style }}>
       {error ? (
-        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #1E1A16 0%, #161210 100%)' }} />
+        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #F3ECE3 0%, #E8C8C8 100%)' }} />
       ) : (
         <img
           src={photo.src}
@@ -60,44 +60,43 @@ export default function PhotoStory() {
               trigger: sectionRef.current,
               start: 'top top',
               end: 'bottom top',
-              scrub: 1,
+              scrub: true,
               pin: inner,
             },
           });
 
-          // Photo 1: slides in from left with parallax
+          // Fast reveal
           tl.fromTo(photos[0],
-            { x: isMobile ? '-20%' : '-40%', opacity: 0, scale: 1.05, filter: 'blur(4px)' },
+            { x: isMobile ? '-15%' : '-30%', opacity: 0, scale: 1.05, filter: 'blur(4px)' },
             { x: '0%', opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power2.out' },
             0
           );
 
-          // Photo 2: slides in from right, slightly delayed
           tl.fromTo(photos[1],
-            { x: isMobile ? '20%' : '40%', opacity: 0, scale: 1.05, filter: 'blur(4px)' },
+            { x: isMobile ? '15%' : '30%', opacity: 0, scale: 1.05, filter: 'blur(4px)' },
             { x: '0%', opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power2.out' },
-            0.08
+            0.05
           );
 
-          // Background words drift
+          // Background words drift fast
           bgWords.forEach((w, i) => {
             tl.fromTo(w,
-              { x: `${i % 2 === 0 ? 8 : -8}%` },
-              { x: `${i % 2 === 0 ? -8 : 8}%`, ease: 'none' },
+              { x: `${i % 2 === 0 ? 5 : -5}%` },
+              { x: `${i % 2 === 0 ? -5 : 5}%`, ease: 'none' },
               0
             );
           });
 
           // Subtle depth movement
-          tl.to(photos[0], { y: isMobile ? '-2%' : '-5%' }, 0.4);
-          tl.to(photos[1], { y: isMobile ? '2%' : '4%' }, 0.4);
+          tl.to(photos[0], { y: isMobile ? '-2%' : '-4%' }, 0.2);
+          tl.to(photos[1], { y: isMobile ? '2%' : '4%' }, 0.2);
 
           // Caption
           if (caption) {
             tl.fromTo(caption,
               { opacity: 0, y: 10 },
               { opacity: 1, y: 0 },
-              0.5
+              0.4
             );
           }
         } else if (couplePhotos.length === 1) {
@@ -107,27 +106,27 @@ export default function PhotoStory() {
               trigger: sectionRef.current,
               start: 'top top',
               end: 'bottom top',
-              scrub: 1,
+              scrub: true,
               pin: inner,
             },
           });
 
           tl.fromTo(photos[0],
-            { scale: 1.1, filter: 'blur(6px)', opacity: 0 },
+            { scale: 1.05, filter: 'blur(4px)', opacity: 0 },
             { scale: 1, filter: 'blur(0px)', opacity: 1, ease: 'power2.out' },
             0
           );
 
           bgWords.forEach((w, i) => {
             tl.fromTo(w,
-              { x: `${i % 2 === 0 ? 5 : -5}%` },
-              { x: `${i % 2 === 0 ? -5 : 5}%`, ease: 'none' },
+              { x: `${i % 2 === 0 ? 3 : -3}%` },
+              { x: `${i % 2 === 0 ? -3 : 3}%`, ease: 'none' },
               0
             );
           });
 
           if (caption) {
-            tl.fromTo(caption, { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, 0.4);
+            tl.fromTo(caption, { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, 0.3);
           }
         }
       });
@@ -145,8 +144,8 @@ export default function PhotoStory() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: isDual ? '160svh' : '140svh',
-        background: '#161210',
+        height: isDual ? '140svh' : '120svh', // Highly compressed pacing
+        background: 'transparent',
       }}
     >
       <div
@@ -159,10 +158,10 @@ export default function PhotoStory() {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
-          background: '#161210',
+          background: 'transparent',
         }}
       >
-        {/* Background typography */}
+        {/* Background typography — light blush color */}
         {[eventConfig.groomName, eventConfig.brideName].map((name, i) => (
           <span
             key={name}
@@ -174,7 +173,7 @@ export default function PhotoStory() {
               fontFamily: "'Cormorant Garamond', serif",
               fontWeight: 300,
               fontSize: 'clamp(4rem, 18vw, 13rem)',
-              color: 'rgba(242, 236, 226, 0.025)',
+              color: 'rgba(199, 154, 139, 0.08)',
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
               whiteSpace: 'nowrap',
@@ -204,8 +203,8 @@ export default function PhotoStory() {
                 left: 'clamp(3%, 5vw, 10%)',
                 top: '12%',
                 zIndex: 3,
-                boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
-                borderRadius: '2px',
+                boxShadow: '0 25px 50px rgba(79, 62, 57, 0.2)',
+                borderRadius: '8px', // Slightly softer corners for light theme
               }}
             />
             <PhotoImage
@@ -218,8 +217,8 @@ export default function PhotoStory() {
                 right: 'clamp(3%, 5vw, 10%)',
                 bottom: '12%',
                 zIndex: 2,
-                boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
-                borderRadius: '2px',
+                boxShadow: '0 25px 50px rgba(79, 62, 57, 0.2)',
+                borderRadius: '8px',
               }}
             />
           </div>
@@ -232,8 +231,8 @@ export default function PhotoStory() {
               width: 'min(85vw, 400px)',
               height: 'min(70vh, 600px)',
               zIndex: 2,
-              boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
-              borderRadius: '2px',
+              boxShadow: '0 30px 60px rgba(79, 62, 57, 0.2)',
+              borderRadius: '8px',
             }}
           />
         )}
@@ -244,9 +243,9 @@ export default function PhotoStory() {
           bottom: '6%',
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
-          fontWeight: 300,
-          fontSize: '0.9rem',
-          color: '#8F857B',
+          fontWeight: 400,
+          fontSize: '1rem',
+          color: '#6A5148',
           zIndex: 5,
           opacity: 0,
         }}>

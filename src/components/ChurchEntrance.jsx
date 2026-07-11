@@ -13,7 +13,7 @@ export default function ChurchEntrance() {
 
     const ctx = gsap.context(() => {
       const door = sectionRef.current.querySelector('.ent-door');
-      const darkOverlay = sectionRef.current.querySelector('.ent-dark');
+      const lightOverlay = sectionRef.current.querySelector('.ent-light');
       const inner = sectionRef.current.querySelector('.ent-inner');
       const glowInner = sectionRef.current.querySelector('.ent-glow');
 
@@ -30,30 +30,30 @@ export default function ChurchEntrance() {
             trigger: sectionRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: true,
             pin: inner,
           },
         });
 
-        // Door scales up
+        // Door scales up dramatically
         tl.to(door, {
           width: '250vw',
           height: '250vh',
           ease: 'power2.in',
         }, 0);
 
-        // Glow intensifies
+        // Warm light intensifies inside
         tl.to(glowInner, {
-          opacity: 0.8,
+          opacity: 0.9,
           scale: 2,
           ease: 'power1.in',
         }, 0);
 
-        // Darkness takes over
-        tl.to(darkOverlay, {
+        // Fade out everything into a soft blush/light transition
+        tl.to(lightOverlay, {
           opacity: 1,
           ease: 'power2.in',
-        }, 0.7);
+        }, 0.6);
       });
     }, sectionRef);
 
@@ -65,8 +65,8 @@ export default function ChurchEntrance() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '110svh',
-        background: '#161210',
+        height: '100svh', // Highly compressed
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
@@ -79,19 +79,21 @@ export default function ChurchEntrance() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#161210',
+          background: 'transparent',
         }}
       >
-        {/* Door opening */}
+        {/* Door opening - warm light pouring out */}
         <div
           className="ent-door"
           style={{
             position: 'relative',
             width: '18vw',
             height: '35vh',
-            background: 'linear-gradient(180deg, rgba(242, 236, 226, 0.08) 0%, rgba(214, 181, 122, 0.04) 100%)',
+            background: 'linear-gradient(180deg, rgba(232, 200, 200, 0.2) 0%, rgba(214, 181, 122, 0.1) 100%)',
             overflow: 'hidden',
             borderRadius: '50% 50% 0 0 / 30% 30% 0 0',
+            border: '1px solid rgba(199, 154, 139, 0.1)',
+            boxShadow: 'inset 0 10px 30px rgba(214, 181, 122, 0.1)',
           }}
         >
           <div
@@ -99,19 +101,19 @@ export default function ChurchEntrance() {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(ellipse at 50% 60%, rgba(214, 181, 122, 0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at 50% 60%, rgba(214, 181, 122, 0.4) 0%, transparent 70%)',
               opacity: 0.3,
             }}
           />
         </div>
 
-        {/* Dark overlay */}
+        {/* Transition overlay - pure light paper color */}
         <div
-          className="ent-dark"
+          className="ent-light"
           style={{
             position: 'absolute',
             inset: 0,
-            background: '#161210',
+            background: '#F7F1EA',
             opacity: 0,
             pointerEvents: 'none',
           }}

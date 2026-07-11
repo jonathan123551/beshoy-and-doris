@@ -1,146 +1,118 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
-import gsap from 'gsap';
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 
-export default function MusicPlayer({ autoStart }) {
+const MusicPlayer = forwardRef(({ autoStart = false }, ref) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const audioRef = useRef(null);
-  const btnRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
-  const hasStarted = useRef(false);
+
+  // Expose the play method to the parent (App)
+  useImperativeHandle(ref, () => ({
+    play: async () => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0;
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+          // Fade in slowly over 2 seconds
+          let vol = 0;
+          const fadeInterval = setInterval(() => {
+            if (vol < 0.15) {
+              vol += 0.01;
+              audioRef.current.volume = Math.min(vol, 0.15);
+            } else {
+              clearInterval(fadeInterval);
+            }
+          }, 100);
+        } catch (err) {
+          console.log('Audio autoplay blocked or failed:', err);
+        }
+      }
+    }
+  }));
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.volume = 0;
+    const audio = new Audio('/audio/wedding-audio.mp3');
     audio.loop = true;
+    audio.volume = 0.15; // Set base volume
+
+    audio.addEventListener('canplaythrough', () => {
+      setIsLoaded(true);
+    });
+
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
   }, []);
 
-  // Auto-start after envelope opens
-  useEffect(() => {
-    if (!autoStart || hasStarted.current) return;
-    hasStarted.current = true;
-    const audio = audioRef.current;
-    if (!audio) return;
+  const togglePlay = () => {
+    if (!audioRef.current) return;
 
-    // Small delay for smooth transition
-    const timer = setTimeout(() => {
-      audio.play().then(() => {
-        setPlaying(true);
-        gsap.to(audio, {
-          volume: 0.12,
-          duration: 2,
-          ease: 'power2.in',
-        });
-      }).catch(() => {});
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, [autoStart]);
-
-  // Pulse animation when paused
-  useEffect(() => {
-    if (!btnRef.current) return;
-    const ring = btnRef.current.querySelector('.pulse-ring');
-    if (!ring) return;
-    const ctx = gsap.context(() => {
-      if (!playing) {
-        gsap.to(ring, {
-          scale: 1.5,
-          opacity: 0,
-          duration: 2,
-          repeat: -1,
-          ease: 'power1.out',
-        });
-      }
-    }, btnRef);
-    return () => ctx.revert();
-  }, [playing]);
-
-  const toggle = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (playing) {
-      gsap.to(audio, {
-        volume: 0,
-        duration: 0.8,
-        ease: 'power2.out',
-        onComplete: () => {
-          audio.pause();
-          setPlaying(false);
-        },
-      });
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
     } else {
-      audio.play().then(() => {
-        setPlaying(true);
-        gsap.to(audio, {
-          volume: 0.12,
-          duration: 1.5,
-          ease: 'power2.in',
-        });
-      }).catch(() => {});
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch(err => console.log('Audio playback failed:', err));
     }
-  }, [playing]);
+  };
 
-  // Entrance animation
-  useEffect(() => {
-    if (!btnRef.current) return;
-    gsap.fromTo(btnRef.current,
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: 'power3.out' }
-    );
-  }, [autoStart]);
+  if (!isLoaded) return null;
 
   return (
-    <>
-      <audio ref={audioRef} preload="auto" src="/music/theme.mp3" />
-      <button
-        ref={btnRef}
-        onClick={toggle}
-        aria-label={playing ? 'Pause music' : 'Play music'}
-        style={{
-          position: 'fixed',
-          bottom: 'max(env(safe-area-inset-bottom, 16px), 20px)',
-          right: '20px',
-          zIndex: 200,
-          width: '42px',
-          height: '42px',
-          borderRadius: '50%',
-          background: 'rgba(22, 18, 16, 0.7)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(214, 181, 122, 0.15)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          opacity: 0,
-          transition: 'border-color 0.3s ease',
-        }}
-      >
-        {!playing && (
-          <span
-            className="pulse-ring"
+    <button
+      onClick={togglePlay}
+      style={{
+        position: 'fixed',
+        bottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))',
+        right: '2rem',
+        zIndex: 50,
+        width: '44px',
+        height: '44px',
+        borderRadius: '50%',
+        background: 'rgba(255, 255, 255, 0.4)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        border: '1px solid rgba(199, 154, 139, 0.3)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        boxShadow: '0 4px 15px rgba(106, 81, 72, 0.08)',
+        transition: 'transform 0.3s ease, border-color 0.3s ease',
+        transform: isPlaying ? 'scale(1)' : 'scale(0.95)',
+      }}
+      aria-label={isPlaying ? 'Pause music' : 'Play music'}
+    >
+      {/* Animated bars */}
+      <div style={{ display: 'flex', gap: '3px', height: '14px', alignItems: 'flex-end' }}>
+        {[1, 2, 3].map((bar) => (
+          <div
+            key={bar}
             style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: '50%',
-              border: '1px solid rgba(214, 181, 122, 0.25)',
-              pointerEvents: 'none',
+              width: '2px',
+              backgroundColor: '#4F3E39', // Dark luxury text color
+              borderRadius: '2px',
+              height: isPlaying ? '100%' : '3px',
+              transition: 'height 0.3s ease',
+              animation: isPlaying ? `bounce${bar} 1s infinite alternate ease-in-out` : 'none',
+              animationDelay: `${bar * 0.15}s`,
             }}
           />
-        )}
+        ))}
+      </div>
 
-        {playing ? (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-            <rect x="6" y="4" width="4" height="16" rx="1" fill="#D6B57A" />
-            <rect x="14" y="4" width="4" height="16" rx="1" fill="#D6B57A" />
-          </svg>
-        ) : (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-            <path d="M8 5.14v14.72a1 1 0 001.5.86l11.14-7.36a1 1 0 000-1.72L9.5 4.28A1 1 0 008 5.14z" fill="#D6B57A" />
-          </svg>
-        )}
-      </button>
-    </>
+      <style>{`
+        @keyframes bounce1 { 0% { height: 4px; } 100% { height: 14px; } }
+        @keyframes bounce2 { 0% { height: 8px; } 100% { height: 12px; } }
+        @keyframes bounce3 { 0% { height: 3px; } 100% { height: 10px; } }
+      `}</style>
+    </button>
   );
-}
+});
+
+MusicPlayer.displayName = 'MusicPlayer';
+export default MusicPlayer;

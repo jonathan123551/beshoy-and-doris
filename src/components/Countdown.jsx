@@ -35,17 +35,17 @@ export default function Countdown() {
     const ctx = gsap.context(() => {
       const items = sectionRef.current.querySelectorAll('.cd-item');
       gsap.fromTo(items,
-        { opacity: 0, y: 30, filter: 'blur(4px)' },
+        { opacity: 0, y: 25, filter: 'blur(4px)' },
         {
           opacity: 1,
           y: 0,
           filter: 'blur(0px)',
           stagger: 0.08,
-          duration: 0.9,
+          duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top 85%',
             toggleActions: 'play none none none',
           },
         }
@@ -69,8 +69,8 @@ export default function Countdown() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '50vh',
-        background: '#161210',
+        minHeight: '40svh', // Compressed
+        background: 'transparent',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -78,7 +78,7 @@ export default function Countdown() {
         overflow: 'hidden',
       }}
     >
-      {/* Subtle warm glow */}
+      {/* Blush warm glow */}
       <div style={{
         position: 'absolute',
         width: '60vw',
@@ -86,7 +86,7 @@ export default function Countdown() {
         maxWidth: '350px',
         maxHeight: '350px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.03) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(232, 200, 200, 0.25) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -94,9 +94,9 @@ export default function Countdown() {
         <p style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
-          fontWeight: 300,
+          fontWeight: 400,
           fontSize: 'clamp(1rem, 3vw, 1.3rem)',
-          color: '#8F857B',
+          color: '#8F7D78',
           textAlign: 'center',
         }}>
           Today became a memory.
@@ -124,7 +124,7 @@ export default function Countdown() {
                   fontFamily: "'Cormorant Garamond', serif",
                   fontWeight: 300,
                   fontSize: 'clamp(2.2rem, 7vw, 4.5rem)',
-                  color: '#F2ECE2',
+                  color: '#4F3E39', // Dark luxury text
                   lineHeight: 1,
                   display: 'block',
                   fontVariantNumeric: 'tabular-nums',
@@ -134,10 +134,10 @@ export default function Countdown() {
                 <span style={{
                   fontFamily: "'Manrope', sans-serif",
                   fontSize: '0.5rem',
-                  fontWeight: 400,
+                  fontWeight: 500,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: '#8F857B',
+                  color: '#8F7D78',
                   display: 'block',
                   marginTop: '0.7em',
                 }}>
@@ -148,7 +148,7 @@ export default function Countdown() {
                 <div style={{
                   width: '1px',
                   height: '2.5rem',
-                  background: 'rgba(30, 26, 22, 0.8)',
+                  background: 'rgba(106, 81, 72, 0.2)',
                   flexShrink: 0,
                 }} />
               )}

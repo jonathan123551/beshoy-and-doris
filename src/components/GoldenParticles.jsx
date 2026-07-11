@@ -11,14 +11,14 @@ function createParticles() {
       id: i,
       left: Math.random() * 100,
       delay: Math.random() * 14,
-      duration: 14 + Math.random() * 18,
+      duration: 16 + Math.random() * 20, // Slower, more organic
       // Mix of types: petals, dust, bokeh
-      isPetal: type < 0.3,
-      isBokeh: type >= 0.3 && type < 0.55,
-      isDust: type >= 0.55,
-      size: type < 0.3 ? (6 + Math.random() * 8) : (type < 0.55 ? (4 + Math.random() * 10) : (1.5 + Math.random() * 2.5)),
-      opacity: type < 0.3 ? (0.04 + Math.random() * 0.06) : (type < 0.55 ? (0.03 + Math.random() * 0.05) : (0.08 + Math.random() * 0.12)),
-      blur: type < 0.55 ? (0.5 + Math.random() * 2) : 0,
+      isPetal: type < 0.35,
+      isBokeh: type >= 0.35 && type < 0.65,
+      isDust: type >= 0.65,
+      size: type < 0.35 ? (8 + Math.random() * 10) : (type < 0.65 ? (6 + Math.random() * 14) : (2 + Math.random() * 3)),
+      opacity: type < 0.35 ? (0.3 + Math.random() * 0.4) : (type < 0.65 ? (0.2 + Math.random() * 0.3) : (0.4 + Math.random() * 0.5)),
+      blur: type < 0.65 ? (0.5 + Math.random() * 2) : 0,
       rotation: Math.random() * 360,
     });
   }
@@ -55,8 +55,8 @@ export default function AtmosphericParticles() {
 
         // Horizontal sway
         gsap.to(el, {
-          x: `+=${(Math.random() - 0.5) * 100}`,
-          duration: p.duration * 0.6,
+          x: `+=${(Math.random() - 0.5) * 120}`,
+          duration: p.duration * 0.7,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
@@ -67,7 +67,7 @@ export default function AtmosphericParticles() {
         if (p.isPetal) {
           gsap.to(el, {
             rotation: `+=${180 + Math.random() * 360}`,
-            duration: p.duration,
+            duration: p.duration * 1.2,
             repeat: -1,
             ease: 'none',
             delay: p.delay,
@@ -77,8 +77,8 @@ export default function AtmosphericParticles() {
         // Scale pulse for bokeh
         if (p.isBokeh) {
           gsap.to(el, {
-            scale: 1.3,
-            duration: 3 + Math.random() * 3,
+            scale: 1.4,
+            duration: 4 + Math.random() * 4,
             repeat: -1,
             yoyo: true,
             ease: 'sine.inOut',
@@ -103,7 +103,7 @@ export default function AtmosphericParticles() {
       }}
     >
       {particleData.map((p) => {
-        // Petal shape
+        // Petal shape (Blush/Champagne tones)
         if (p.isPetal) {
           return (
             <span
@@ -114,9 +114,9 @@ export default function AtmosphericParticles() {
                 left: `${p.left}%`,
                 bottom: '-20px',
                 width: `${p.size}px`,
-                height: `${p.size * 1.4}px`,
+                height: `${p.size * 1.5}px`,
                 borderRadius: '50% 0 50% 0',
-                background: `linear-gradient(135deg, rgba(233, 222, 208, 0.5), rgba(214, 181, 122, 0.3))`,
+                background: `linear-gradient(135deg, rgba(232, 200, 200, 0.6), rgba(214, 181, 122, 0.4))`,
                 filter: `blur(${p.blur}px)`,
                 opacity: 0,
                 willChange: 'transform, opacity',
@@ -139,7 +139,7 @@ export default function AtmosphericParticles() {
                 height: `${p.size}px`,
                 borderRadius: '50%',
                 background: 'transparent',
-                border: `1px solid rgba(214, 181, 122, 0.15)`,
+                border: `1.5px solid rgba(199, 154, 139, 0.25)`,
                 filter: `blur(${p.blur}px)`,
                 opacity: 0,
                 willChange: 'transform, opacity',
@@ -148,7 +148,7 @@ export default function AtmosphericParticles() {
           );
         }
 
-        // Golden dust
+        // Warm light dust
         return (
           <span
             key={p.id}
@@ -160,7 +160,7 @@ export default function AtmosphericParticles() {
               width: `${p.size}px`,
               height: `${p.size}px`,
               borderRadius: '50%',
-              background: `radial-gradient(circle, rgba(214, 181, 122, 0.8) 0%, rgba(207, 174, 112, 0.2) 70%, transparent 100%)`,
+              background: `radial-gradient(circle, rgba(214, 181, 122, 0.9) 0%, rgba(232, 200, 200, 0.4) 60%, transparent 100%)`,
               opacity: 0,
               willChange: 'transform, opacity',
             }}

@@ -17,17 +17,17 @@ export default function FinalFrame() {
       const line = sectionRef.current.querySelector('.ff-line');
 
       gsap.fromTo(texts,
-        { opacity: 0, y: 15, filter: 'blur(3px)' },
+        { opacity: 0, y: 10, filter: 'blur(3px)' },
         {
           opacity: 1,
           y: 0,
           filter: 'blur(0px)',
-          stagger: 0.15,
+          stagger: 0.1,
           duration: 0.9,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 75%',
+            start: 'top 85%',
             toggleActions: 'play none none none',
           },
         }
@@ -42,7 +42,7 @@ export default function FinalFrame() {
             ease: 'power2.out',
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: 'top 70%',
+              start: 'top 80%',
               toggleActions: 'play none none none',
             },
           }
@@ -59,7 +59,7 @@ export default function FinalFrame() {
       style={{
         position: 'relative',
         minHeight: '60vh',
-        background: '#161210',
+        background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -69,7 +69,7 @@ export default function FinalFrame() {
         overflow: 'hidden',
       }}
     >
-      {/* Warm glow */}
+      {/* Rose Gold glow */}
       <div style={{
         position: 'absolute',
         width: '40vw',
@@ -77,7 +77,7 @@ export default function FinalFrame() {
         maxWidth: '250px',
         maxHeight: '250px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.03) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(199, 154, 139, 0.2) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -86,9 +86,9 @@ export default function FinalFrame() {
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
-          fontWeight: 300,
+          fontWeight: 400,
           fontSize: 'clamp(1.6rem, 5vw, 2.8rem)',
-          color: '#F2ECE2',
+          color: '#4F3E39', // Dark luxury text
           lineHeight: 1.2,
           opacity: 0,
           position: 'relative',
@@ -103,9 +103,9 @@ export default function FinalFrame() {
         style={{
           fontFamily: "'Manrope', sans-serif",
           fontSize: '0.7rem',
-          fontWeight: 400,
+          fontWeight: 600,
           letterSpacing: '0.2em',
-          color: '#8F857B',
+          color: '#8F7D78',
           marginTop: '0.8em',
           opacity: 0,
           position: 'relative',
@@ -120,7 +120,7 @@ export default function FinalFrame() {
         style={{
           width: '1px',
           height: '50px',
-          background: 'linear-gradient(180deg, #D6B57A, rgba(214, 181, 122, 0.1))',
+          background: 'linear-gradient(180deg, #C79A8B, transparent)',
           margin: '2rem auto',
           transformOrigin: 'top center',
           transform: 'scaleY(0)',
@@ -134,9 +134,9 @@ export default function FinalFrame() {
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
-          fontWeight: 300,
+          fontWeight: 400,
           fontSize: '0.9rem',
-          color: '#8F857B',
+          color: '#8F7D78',
           opacity: 0,
           position: 'relative',
           zIndex: 2,

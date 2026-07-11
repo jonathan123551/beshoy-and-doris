@@ -32,43 +32,43 @@ export default function DateSequence() {
             trigger: sectionRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: true,
             pin: inner,
           },
         });
 
         // Tighter beats on mobile
         const b = isMobile
-          ? [0, 0.18, 0.36, 0.54, 0.75]
-          : [0, 0.2, 0.4, 0.6, 0.8];
+          ? [0, 0.15, 0.3, 0.45, 0.65]
+          : [0, 0.18, 0.36, 0.54, 0.75];
 
         // 14 enters
         tl.fromTo(num14,
-          { y: '80%', opacity: 0, filter: 'blur(8px)' },
+          { y: '60%', opacity: 0, filter: 'blur(8px)' },
           { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
           b[0]
         );
 
         // 14 exits, 11 enters
-        tl.to(num14, { y: '-40%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[1]);
+        tl.to(num14, { y: '-30%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[1]);
         tl.fromTo(num11,
-          { y: '80%', opacity: 0, filter: 'blur(8px)' },
+          { y: '60%', opacity: 0, filter: 'blur(8px)' },
           { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
           b[1]
         );
 
         // 11 exits, 2026 enters
-        tl.to(num11, { y: '-40%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[2]);
+        tl.to(num11, { y: '-30%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[2]);
         tl.fromTo(num2026,
-          { y: '80%', opacity: 0, filter: 'blur(8px)' },
+          { y: '60%', opacity: 0, filter: 'blur(8px)' },
           { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
           b[2]
         );
 
         // 2026 exits, assembled date appears
-        tl.to(num2026, { y: '-40%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[3]);
+        tl.to(num2026, { y: '-30%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[3]);
         tl.fromTo(assembled,
-          { scale: 1.3, opacity: 0, filter: 'blur(6px)' },
+          { scale: 1.2, opacity: 0, filter: 'blur(6px)' },
           { scale: 1, opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
           b[3]
         );
@@ -90,7 +90,7 @@ export default function DateSequence() {
     fontFamily: "'Cormorant Garamond', serif",
     fontWeight: 300,
     fontSize: 'clamp(7rem, 28vw, 18rem)',
-    color: '#F2ECE2',
+    color: '#E8C8C8', // Blush huge numbers
     lineHeight: 1,
     opacity: 0,
     pointerEvents: 'none',
@@ -101,8 +101,8 @@ export default function DateSequence() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '180svh',
-        background: '#161210',
+        height: '130svh', // Highly compressed pacing
+        background: 'transparent',
       }}
     >
       <div
@@ -118,7 +118,7 @@ export default function DateSequence() {
           overflow: 'hidden',
         }}
       >
-        {/* Warm background glow */}
+        {/* Soft glow */}
         <div style={{
           position: 'absolute',
           width: '70vw',
@@ -126,7 +126,7 @@ export default function DateSequence() {
           maxWidth: '400px',
           maxHeight: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.04) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(232, 200, 200, 0.3) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
 
@@ -142,7 +142,7 @@ export default function DateSequence() {
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: 'clamp(2.2rem, 9vw, 4.5rem)',
           letterSpacing: '0.08em',
-          color: '#F2ECE2',
+          color: '#4F3E39', // Dark luxury text
           fontWeight: 300,
           opacity: 0,
         }}>
@@ -164,7 +164,7 @@ export default function DateSequence() {
             fontSize: '0.65rem',
             letterSpacing: '0.3em',
             textTransform: 'uppercase',
-            color: '#8F857B',
+            color: '#8F7D78',
             marginBottom: '0.4em',
           }}>
             Saturday
@@ -172,8 +172,8 @@ export default function DateSequence() {
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: '1.3rem',
-            fontWeight: 300,
-            color: '#F2ECE2',
+            fontWeight: 400,
+            color: '#6A5148',
           }}>
             5:00 PM
           </p>

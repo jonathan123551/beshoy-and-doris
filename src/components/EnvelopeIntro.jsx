@@ -24,7 +24,7 @@ export default function EnvelopeIntro({ onOpen }) {
 
       // Gentle float
       gsap.to('.env-envelope', {
-        y: -8,
+        y: -6,
         duration: 3,
         repeat: -1,
         yoyo: true,
@@ -33,8 +33,8 @@ export default function EnvelopeIntro({ onOpen }) {
 
       // Glow pulse
       gsap.to('.env-glow', {
-        opacity: 0.15,
-        scale: 1.1,
+        opacity: 0.8,
+        scale: 1.05,
         duration: 2.5,
         repeat: -1,
         yoyo: true,
@@ -72,38 +72,53 @@ export default function EnvelopeIntro({ onOpen }) {
         ease: 'power2.inOut',
       }, '-=0.1');
 
-      // Letter slides out
+      // Letter slides out slightly, envelope drops
+      tl.to('.env-envelope-body', {
+        y: 150,
+        duration: 1,
+        ease: 'power2.inOut',
+      }, '-=0.3');
+      tl.to('.env-flap', {
+        y: 150,
+        duration: 1,
+        ease: 'power2.inOut',
+      }, '-=1');
+
       tl.to('.env-letter', {
-        y: -200,
-        scale: 1.05,
-        duration: 0.8,
+        y: -100,
+        scale: 1.1,
+        duration: 1,
         ease: 'power2.out',
-      }, '-=0.4');
+      }, '-=1');
 
       // Hint fades
       tl.to('.env-hint', {
         opacity: 0,
         duration: 0.3,
-      }, '-=0.8');
+      }, '-=1.2');
 
-      // Brief hold to appreciate
-      tl.to({}, { duration: 0.6 });
+      // Brief hold to appreciate the letter
+      tl.to({}, { duration: 0.4 });
 
-      // Everything zooms in and fades
-      tl.to('.env-wrap', {
-        scale: 1.3,
-        opacity: 0,
-        filter: 'blur(8px)',
-        duration: 1,
-        ease: 'power2.inOut',
+      // Camera pushes INTO the letter until it fills the screen
+      // The letter is #FCF8F5, matching the global background
+      tl.to('.env-letter', {
+        scale: 15,
+        y: 100, // Move down so we zoom into the blank paper part
+        opacity: 0, // Crossfade to the actual scene behind it
+        duration: 1.2,
+        ease: 'power3.in',
       });
 
-      // Container slides up
+      // The entire wrapper fades out seamlessly
       tl.to(containerRef.current, {
-        yPercent: -100,
-        duration: 0.8,
-        ease: 'power3.inOut',
-      }, '-=0.5');
+        opacity: 0,
+        duration: 0.4,
+        ease: 'power1.inOut',
+      }, '-=0.4');
+
+      // Hide the container to remove from DOM flow
+      tl.set(containerRef.current, { display: 'none' });
 
     }, containerRef);
   };
@@ -122,9 +137,8 @@ export default function EnvelopeIntro({ onOpen }) {
         inset: 0,
         zIndex: 9999,
         background: `
-          radial-gradient(ellipse at 50% 30%, rgba(42, 35, 30, 0.6) 0%, transparent 50%),
-          radial-gradient(circle at 50% 80%, rgba(214, 181, 122, 0.03) 0%, transparent 40%),
-          #161210
+          radial-gradient(circle at top, #F7F1EA 0%, transparent 60%),
+          #FCF8F5
         `,
         display: 'flex',
         alignItems: 'center',
@@ -134,7 +148,7 @@ export default function EnvelopeIntro({ onOpen }) {
       }}
       onClick={handleOpen}
     >
-      {/* Ambient glow behind envelope */}
+      {/* Warm Glow behind envelope */}
       <div
         className="env-glow"
         style={{
@@ -144,38 +158,43 @@ export default function EnvelopeIntro({ onOpen }) {
           maxWidth: '400px',
           maxHeight: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.08) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(232, 200, 200, 0.4) 0%, transparent 65%)',
           pointerEvents: 'none',
-          opacity: 0.08,
+          opacity: 0.5,
         }}
       />
 
-      <div className="env-wrap" style={{ opacity: 0, position: 'relative' }}>
+      <div className="env-wrap" style={{ opacity: 0, position: 'relative', zIndex: 2 }}>
         {/* Envelope */}
         <div
           className="env-envelope"
           style={{
             width: 'min(85vw, 380px)',
-            height: '220px',
+            height: '240px',
             position: 'relative',
-            perspective: '1000px',
-            filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.4))',
+            perspective: '1200px',
+            filter: 'drop-shadow(0 25px 45px rgba(79, 62, 57, 0.15))',
           }}
         >
-          {/* Envelope body */}
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(145deg, #E9DED0 0%, #D6CBBD 50%, #C9BDA8 100%)',
-            borderRadius: '12px',
-            overflow: 'hidden',
-          }}>
+          {/* Envelope body (back pocket) */}
+          <div
+            className="env-envelope-body"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(135deg, #F3ECE3 0%, #F7F1EA 50%, #E8C8C8 100%)',
+              borderRadius: '12px',
+              border: '1px solid rgba(214, 181, 122, 0.3)',
+              overflow: 'hidden',
+              zIndex: 3,
+            }}
+          >
             {/* Paper texture overlay */}
             <div style={{
               position: 'absolute',
               inset: 0,
-              opacity: 0.08,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+              opacity: 0.15,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
               mixBlendMode: 'multiply',
             }} />
             {/* Fold lines */}
@@ -183,8 +202,8 @@ export default function EnvelopeIntro({ onOpen }) {
               position: 'absolute',
               inset: 0,
               background: `
-                linear-gradient(32deg, transparent 48%, rgba(255,255,255,0.3) 49.5%, transparent 51%),
-                linear-gradient(-32deg, transparent 48%, rgba(255,255,255,0.25) 49.5%, transparent 51%)
+                linear-gradient(32deg, transparent 48.5%, rgba(255,255,255,0.6) 49.5%, transparent 51%),
+                linear-gradient(-32deg, transparent 48.5%, rgba(255,255,255,0.6) 49.5%, transparent 51%)
               `,
             }} />
           </div>
@@ -197,59 +216,73 @@ export default function EnvelopeIntro({ onOpen }) {
               left: '50%',
               bottom: '15px',
               transform: 'translateX(-50%)',
-              width: '82%',
-              height: '180px',
-              background: 'linear-gradient(180deg, #F8F3EA 0%, #F2ECE2 100%)',
+              width: '84%',
+              height: '210px',
+              background: '#FCF8F5', /* Matches global background for seamless transition */
               borderRadius: '10px',
-              border: '1px solid rgba(214, 181, 122, 0.2)',
+              border: '1px solid rgba(199, 154, 139, 0.2)',
               zIndex: 2,
-              padding: '1.5rem 1rem',
+              padding: '2rem 1rem',
               textAlign: 'center',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+              boxShadow: '0 4px 15px rgba(79, 62, 57, 0.05)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
+              transformOrigin: 'bottom center',
             }}
           >
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontStyle: 'italic',
-              fontSize: '0.75rem',
-              color: '#8F857B',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              marginBottom: '0.6em',
-            }}>
-              You're Invited
-            </p>
-            <h1 style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 'clamp(1.8rem, 8vw, 2.8rem)',
-              fontWeight: 300,
-              color: '#5C4B3E',
-              lineHeight: 0.95,
-            }}>
-              {eventConfig.groomName}
-            </h1>
-            <span style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: '1rem',
-              color: '#D6B57A',
-              margin: '0.2em 0',
-              fontStyle: 'italic',
-            }}>
-              &amp;
-            </span>
-            <h1 style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 'clamp(1.8rem, 8vw, 2.8rem)',
-              fontWeight: 300,
-              color: '#5C4B3E',
-              lineHeight: 0.95,
-            }}>
-              {eventConfig.brideName}
-            </h1>
+            {/* Paper texture on letter */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              opacity: 0.1,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+              mixBlendMode: 'multiply',
+              borderRadius: '10px',
+            }} />
+
+            <div style={{ position: 'relative', zIndex: 2 }}>
+              <p style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontStyle: 'italic',
+                fontSize: '0.85rem',
+                color: '#C79A8B',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                marginBottom: '0.8em',
+              }}>
+                You're Invited
+              </p>
+              <h1 style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 'clamp(2rem, 9vw, 3.2rem)',
+                fontWeight: 300,
+                color: '#4F3E39',
+                lineHeight: 0.95,
+              }}>
+                {eventConfig.groomName}
+              </h1>
+              <span style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: '1.2rem',
+                color: '#D6B57A',
+                margin: '0.2em 0',
+                fontStyle: 'italic',
+                display: 'block',
+              }}>
+                &amp;
+              </span>
+              <h1 style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 'clamp(2rem, 9vw, 3.2rem)',
+                fontWeight: 300,
+                color: '#4F3E39',
+                lineHeight: 0.95,
+              }}>
+                {eventConfig.brideName}
+              </h1>
+            </div>
           </div>
 
           {/* Flap */}
@@ -260,20 +293,21 @@ export default function EnvelopeIntro({ onOpen }) {
               top: 0,
               left: 0,
               width: '100%',
-              height: '120px',
-              background: 'linear-gradient(145deg, #D6CBBD 0%, #C9BDA8 100%)',
+              height: '135px',
+              background: 'linear-gradient(135deg, #F3ECE3 0%, #E8C8C8 100%)',
               clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
               transformOrigin: 'top center',
               zIndex: 4,
               borderRadius: '12px 12px 0 0',
+              borderTop: '1px solid #FFF',
             }}
           >
             {/* Paper texture on flap */}
             <div style={{
               position: 'absolute',
               inset: 0,
-              opacity: 0.06,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+              opacity: 0.15,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
               mixBlendMode: 'multiply',
             }} />
           </div>
@@ -284,26 +318,27 @@ export default function EnvelopeIntro({ onOpen }) {
             style={{
               position: 'absolute',
               left: '50%',
-              top: '105px',
+              top: '115px',
               transform: 'translateX(-50%)',
-              width: '52px',
-              height: '52px',
+              width: '60px',
+              height: '60px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #A9885B 0%, #8B6F47 50%, #7A603C 100%)',
+              background: 'linear-gradient(135deg, #C79A8B 0%, #A67B6D 50%, #8A6155 100%)',
               zIndex: 5,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 6px 18px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.15)',
+              boxShadow: '0 8px 20px rgba(106, 81, 72, 0.3), inset 0 2px 4px rgba(255,255,255,0.2)',
             }}
           >
             <span style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontStyle: 'italic',
-              fontSize: '0.8rem',
-              color: '#F8F3EA',
+              fontSize: '1.1rem',
+              color: '#F7F1EA',
               letterSpacing: '0.05em',
               fontWeight: 500,
+              textShadow: '0 1px 2px rgba(0,0,0,0.2)',
             }}>
               B&D
             </span>
@@ -314,12 +349,12 @@ export default function EnvelopeIntro({ onOpen }) {
         <p
           className="env-hint"
           style={{
-            marginTop: '2.5rem',
+            marginTop: '3.5rem',
             fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.6rem',
-            letterSpacing: '0.35em',
+            fontSize: '0.65rem',
+            letterSpacing: '0.4em',
             textTransform: 'uppercase',
-            color: '#8F857B',
+            color: '#8F7D78',
             textAlign: 'center',
             opacity: 0,
           }}

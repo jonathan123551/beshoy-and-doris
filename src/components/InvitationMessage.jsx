@@ -22,17 +22,17 @@ export default function InvitationMessage() {
       const divider = sectionRef.current.querySelector('.msg-divider');
 
       gsap.fromTo(els,
-        { opacity: 0, y: 20, filter: 'blur(3px)' },
+        { opacity: 0, y: 15, filter: 'blur(3px)' },
         {
           opacity: 1,
           y: 0,
           filter: 'blur(0px)',
-          stagger: 0.12,
+          stagger: 0.1,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 75%',
-            end: 'center 55%',
+            start: 'top 80%',
+            end: 'center 50%',
             scrub: true,
           },
         }
@@ -45,8 +45,8 @@ export default function InvitationMessage() {
             scaleX: 1,
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: 'top 65%',
-              end: 'center 55%',
+              start: 'top 70%',
+              end: 'center 50%',
               scrub: true,
             },
           }
@@ -62,17 +62,17 @@ export default function InvitationMessage() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '70vh',
-        background: '#161210',
+        minHeight: '60vh', // Compressed
+        background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '10vh 2rem',
+        padding: '8vh 2rem',
         overflow: 'hidden',
       }}
     >
-      {/* Warm glow */}
+      {/* Soft Blush glow */}
       <div style={{
         position: 'absolute',
         width: '50vw',
@@ -80,7 +80,7 @@ export default function InvitationMessage() {
         maxWidth: '300px',
         maxHeight: '300px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.04) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(232, 200, 200, 0.3) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -88,8 +88,8 @@ export default function InvitationMessage() {
       <div className="msg-divider" style={{
         width: '30px',
         height: '1px',
-        background: 'rgba(214, 181, 122, 0.4)',
-        marginBottom: '3rem',
+        background: 'rgba(214, 181, 122, 0.6)',
+        marginBottom: '2.5rem',
         transformOrigin: 'center',
         transform: 'scaleX(0)',
       }} />
@@ -101,12 +101,12 @@ export default function InvitationMessage() {
           style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: 'clamp(1.1rem, 3.5vw, 1.5rem)',
-            color: '#F2ECE2',
+            fontWeight: 400,
+            fontSize: 'clamp(1.2rem, 4vw, 1.6rem)',
+            color: '#4F3E39', // Dark luxury text
             textAlign: 'center',
             lineHeight: 1.7,
-            marginBottom: '1.2em',
+            marginBottom: '1em',
             opacity: 0,
             maxWidth: '420px',
             position: 'relative',

@@ -42,7 +42,7 @@ export default function CelebrationTransition() {
           0.02
         );
 
-        // "we celebrate." enters
+        // "we celebrate." enters quickly
         tl.fromTo(line2,
           { opacity: 0, y: 8 },
           { opacity: 1, y: 0 },
@@ -55,14 +55,14 @@ export default function CelebrationTransition() {
         // "we celebrate." scales up massively
         tl.to(line2, {
           scale: isMobile ? 25 : 18,
-          color: '#F2ECE2',
+          color: '#F3ECE3', // Scales into the ivory color to act as a bridge
           ease: 'power2.in',
         }, isMobile ? 0.35 : 0.45);
 
-        // Warm flash as text fills viewport
+        // Warm flash (Blush/Rose) as text fills viewport
         tl.fromTo(warmFlash,
           { opacity: 0 },
-          { opacity: 0.12, ease: 'power2.in' },
+          { opacity: 0.15, ease: 'power2.in' },
           0.7
         );
         tl.to(warmFlash, { opacity: 0 }, 0.9);
@@ -77,8 +77,8 @@ export default function CelebrationTransition() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '130svh',
-        background: '#161210',
+        height: '110svh', // Highly compressed pacing
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
@@ -93,14 +93,15 @@ export default function CelebrationTransition() {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
+          background: '#F7F1EA',
         }}
       >
         <p className="ct-1" style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
-          fontWeight: 300,
-          fontSize: '1.1rem',
-          color: '#8F857B',
+          fontWeight: 400,
+          fontSize: '1.2rem',
+          color: '#8F7D78',
           position: 'absolute',
           opacity: 0,
         }}>
@@ -110,9 +111,9 @@ export default function CelebrationTransition() {
         <p className="ct-2" style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
-          fontWeight: 300,
+          fontWeight: 400,
           fontSize: 'clamp(1.4rem, 5vw, 2.2rem)',
-          color: '#8F857B',
+          color: '#8F7D78',
           margin: 0,
           whiteSpace: 'nowrap',
           transformOrigin: 'center center',
@@ -121,11 +122,11 @@ export default function CelebrationTransition() {
           we celebrate.
         </p>
 
-        {/* Warm flash overlay */}
+        {/* Blush flash overlay */}
         <div className="ct-flash" style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle, rgba(212, 184, 122, 0.3) 0%, transparent 60%)',
+          background: 'radial-gradient(circle, rgba(232, 200, 200, 0.4) 0%, transparent 60%)',
           opacity: 0,
           pointerEvents: 'none',
         }} />

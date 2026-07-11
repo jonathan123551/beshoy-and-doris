@@ -35,54 +35,33 @@ export default function CeremonyScene() {
           },
         });
 
-        // Background zoom
+        // Background zoom (very subtle)
         tl.fromTo(bg,
-          { scale: isMobile ? 1.15 : 1.3 },
+          { scale: isMobile ? 1.08 : 1.15 },
           { scale: 1, ease: 'none' },
           0
         );
 
-        // Beat 1: Title (immediate)
-        tl.fromTo(textEls[0],
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.05 : 0.1
-        );
+        // Beats (faster pacing)
+        const b = isMobile ? [0.05, 0.15, 0.3, 0.45, 0.6] : [0.1, 0.2, 0.35, 0.5, 0.6];
 
-        // Beat 2: English church name + area
-        tl.fromTo(textEls[1],
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.12 : 0.2
-        );
-
+        // Beat 1: Title
+        tl.fromTo(textEls[0], { opacity: 0, y: 15 }, { opacity: 1, y: 0 }, b[0]);
+        // Beat 2: English church
+        tl.fromTo(textEls[1], { opacity: 0, y: 15 }, { opacity: 1, y: 0 }, b[1]);
         // Beat 3: Arabic name
-        tl.fromTo(textEls[2],
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.22 : 0.35
-        );
-
+        tl.fromTo(textEls[2], { opacity: 0, y: 15 }, { opacity: 1, y: 0 }, b[2]);
         // Beat 4: Date/time
-        tl.fromTo(textEls[3],
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.35 : 0.5
-        );
-
+        tl.fromTo(textEls[3], { opacity: 0, y: 15 }, { opacity: 1, y: 0 }, b[3]);
         // Beat 5: Location CTA
-        tl.fromTo(textEls[4],
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.48 : 0.6
-        );
+        tl.fromTo(textEls[4], { opacity: 0, y: 15 }, { opacity: 1, y: 0 }, b[4]);
 
         // Fade out
         tl.to(textEls, {
           opacity: 0,
           y: -10,
           stagger: 0.02,
-        }, 0.82);
+        }, 0.85);
       });
     }, sectionRef);
 
@@ -94,8 +73,8 @@ export default function CeremonyScene() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '170svh',
-        background: '#161210',
+        height: '140svh', // Highly compressed pacing
+        background: 'transparent',
       }}
     >
       <div
@@ -111,29 +90,27 @@ export default function CeremonyScene() {
           overflow: 'hidden',
         }}
       >
-        {/* Architectural BG */}
+        {/* Warm luxury architectural hint */}
         <div
           className="cer-bg"
           style={{
             position: 'absolute',
-            inset: '-15%',
+            inset: '-10%',
             background: `
-              radial-gradient(ellipse at 50% 30%, rgba(42, 36, 30, 0.6) 0%, transparent 60%),
-              radial-gradient(circle at 50% 70%, rgba(30, 26, 22, 0.4) 0%, #161210 70%)
+              radial-gradient(ellipse at 50% 30%, rgba(243, 236, 227, 0.6) 0%, transparent 60%),
+              radial-gradient(circle at 50% 70%, rgba(232, 200, 200, 0.3) 0%, transparent 70%)
             `,
             zIndex: 1,
           }}
         >
-          {/* Subtle cross lines */}
-          <div style={{ position: 'absolute', left: '50%', top: '10%', bottom: '10%', width: '1px', background: 'rgba(242, 236, 226, 0.02)' }} />
-          <div style={{ position: 'absolute', top: '35%', left: '20%', right: '20%', height: '1px', background: 'rgba(242, 236, 226, 0.02)' }} />
+          {/* Subtle architectural lines */}
+          <div style={{ position: 'absolute', left: '50%', top: '10%', bottom: '10%', width: '1px', background: 'rgba(106, 81, 72, 0.04)' }} />
+          <div style={{ position: 'absolute', top: '35%', left: '20%', right: '20%', height: '1px', background: 'rgba(106, 81, 72, 0.04)' }} />
         </div>
-
-        {/* Film grain */}
-        <div className="film-grain" style={{ position: 'absolute', zIndex: 2 }} />
 
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', padding: '0 1.5rem', width: '100%', maxWidth: '500px' }}>
+          
           {/* Title */}
           <div className="cer-text" style={{ marginBottom: '1.8rem' }}>
             <span style={{
@@ -141,7 +118,7 @@ export default function CeremonyScene() {
               fontSize: '0.6rem',
               letterSpacing: '0.35em',
               textTransform: 'uppercase',
-              color: '#8F857B',
+              color: '#8F7D78',
             }}>
               The Ceremony
             </span>
@@ -154,7 +131,7 @@ export default function CeremonyScene() {
               fontStyle: 'italic',
               fontWeight: 400,
               fontSize: 'clamp(1.6rem, 5.5vw, 2.8rem)',
-              color: '#F2ECE2',
+              color: '#4F3E39',
               lineHeight: 1.2,
             }}>
               {eventConfig.church.name}
@@ -162,7 +139,7 @@ export default function CeremonyScene() {
             <p style={{
               fontFamily: "'Manrope', sans-serif",
               fontSize: '0.7rem',
-              color: '#8F857B',
+              color: '#8F7D78',
               marginTop: '0.4em',
               letterSpacing: '0.1em',
             }}>
@@ -179,7 +156,7 @@ export default function CeremonyScene() {
                 fontFamily: "'Amiri', serif",
                 fontWeight: 400,
                 fontSize: 'clamp(1.3rem, 4.5vw, 1.8rem)',
-                color: 'rgba(242, 236, 226, 0.8)',
+                color: '#6A5148',
                 lineHeight: 1.5,
               }}
             >
@@ -191,7 +168,7 @@ export default function CeremonyScene() {
               style={{
                 fontFamily: "'Amiri', serif",
                 fontSize: '0.85rem',
-                color: '#8F857B',
+                color: '#8F7D78',
                 marginTop: '0.15em',
               }}
             >
@@ -202,11 +179,11 @@ export default function CeremonyScene() {
           {/* Date/Time */}
           <div className="cer-text" style={{ marginBottom: '2.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: '#F2ECE2', fontWeight: 300 }}>14</span>
+              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: '#4F3E39', fontWeight: 300 }}>14</span>
               <span style={{ width: '1px', height: '18px', background: 'rgba(214, 181, 122, 0.4)' }} />
-              <span style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.65rem', letterSpacing: '0.15em', color: '#8F857B', textTransform: 'uppercase' }}>November 2026</span>
+              <span style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.65rem', letterSpacing: '0.15em', color: '#8F7D78', textTransform: 'uppercase' }}>November 2026</span>
               <span style={{ width: '1px', height: '18px', background: 'rgba(214, 181, 122, 0.4)' }} />
-              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1rem, 3vw, 1.3rem)', color: '#F2ECE2', fontWeight: 300 }}>{eventConfig.displayTime}</span>
+              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1rem, 3vw, 1.3rem)', color: '#4F3E39', fontWeight: 300 }}>{eventConfig.displayTime}</span>
             </div>
           </div>
 
@@ -222,21 +199,21 @@ export default function CeremonyScene() {
                 <span style={{
                   fontFamily: "'Manrope', sans-serif",
                   fontSize: '0.6rem',
-                  fontWeight: 400,
+                  fontWeight: 500,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: '#D6B57A',
+                  color: '#C79A8B', // Rose gold
                 }}>
                   Open Church Location
                 </span>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#D6B57A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C79A8B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
                 </svg>
               </div>
               <span dir="rtl" lang="ar" style={{
                 fontFamily: "'Amiri', serif",
                 fontSize: '0.75rem',
-                color: '#8F857B',
+                color: '#8F7D78',
                 marginTop: '0.25em',
               }}>
                 الموقع على الخريطة

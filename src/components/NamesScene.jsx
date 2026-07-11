@@ -13,14 +13,11 @@ export default function NamesScene() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const groom = sectionRef.current.querySelector('.ns-groom');
-      const bride = sectionRef.current.querySelector('.ns-bride');
-      const ampersand = sectionRef.current.querySelector('.ns-amp');
-      const twoStories = sectionRef.current.querySelector('.ns-two');
-      const onePromise = sectionRef.current.querySelector('.ns-one');
+      const gName = sectionRef.current.querySelector('.ns-groom');
+      const bName = sectionRef.current.querySelector('.ns-bride');
+      const sub1 = sectionRef.current.querySelector('.ns-sub1');
+      const sub2 = sectionRef.current.querySelector('.ns-sub2');
       const inner = sectionRef.current.querySelector('.ns-inner');
-      const glowL = sectionRef.current.querySelector('.ns-glow-l');
-      const glowR = sectionRef.current.querySelector('.ns-glow-r');
 
       const mm = gsap.matchMedia();
 
@@ -35,89 +32,47 @@ export default function NamesScene() {
             trigger: sectionRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: true,
             pin: inner,
           },
         });
 
-        // Names converge — closer start on mobile
-        const xDist = isMobile ? '25vw' : '80vw';
-
-        tl.fromTo(groom,
-          { x: `-${xDist}`, opacity: 0, filter: 'blur(6px)' },
-          { x: '0', opacity: 1, filter: 'blur(0px)', ease: 'none' },
+        // Fast convergence
+        tl.fromTo(gName,
+          { x: isMobile ? '-40vw' : '-30vw', opacity: 0 },
+          { x: '0vw', opacity: 1, ease: 'power1.out' },
           0
         );
-        tl.fromTo(bride,
-          { x: xDist, opacity: 0, filter: 'blur(6px)' },
-          { x: '0', opacity: 1, filter: 'blur(0px)', ease: 'none' },
+        tl.fromTo(bName,
+          { x: isMobile ? '40vw' : '30vw', opacity: 0 },
+          { x: '0vw', opacity: 1, ease: 'power1.out' },
           0
         );
 
-        // Ampersand fades in
-        tl.fromTo(ampersand,
-          { opacity: 0, scale: 0.7 },
-          { opacity: 1, scale: 1, ease: 'power2.out' },
-          isMobile ? 0.15 : 0.25
+        // Quick text reveals
+        tl.fromTo(sub1,
+          { opacity: 0, y: 10, filter: 'blur(3px)' },
+          { opacity: 1, y: 0, filter: 'blur(0px)', ease: 'power2.out' },
+          0.3
         );
-
-        // Warm glows breathe in as names converge
-        tl.fromTo(glowL,
-          { opacity: 0 },
-          { opacity: 1 },
-          0.1
+        tl.fromTo(sub2,
+          { opacity: 0, y: 10, filter: 'blur(3px)' },
+          { opacity: 1, y: 0, filter: 'blur(0px)', ease: 'power2.out' },
+          0.55
         );
-        tl.fromTo(glowR,
-          { opacity: 0 },
-          { opacity: 1 },
-          0.15
-        );
-
-        // Text reveals
-        tl.fromTo(twoStories,
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.3 : 0.4
-        );
-        tl.fromTo(onePromise,
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.4 : 0.5
-        );
-
-        // Everything fades at end to transition
-        tl.to([groom, bride, ampersand, twoStories, onePromise, glowL, glowR], {
-          opacity: 0,
-          y: -15,
-          filter: 'blur(2px)',
-          stagger: 0.02,
-        }, isMobile ? 0.7 : 0.75);
       });
-
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
-
-  const nameStyle = {
-    fontFamily: "'Cormorant Garamond', serif",
-    fontWeight: 300,
-    fontSize: 'clamp(3.5rem, 16vw, 9rem)',
-    color: '#F2ECE2',
-    textTransform: 'uppercase',
-    letterSpacing: '0.08em',
-    lineHeight: 1,
-    whiteSpace: 'nowrap',
-    opacity: 0,
-  };
 
   return (
     <section
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '150svh',
-        background: '#161210',
+        height: '130svh', // Highly compressed pacing
+        background: 'transparent',
       }}
     >
       <div
@@ -133,77 +88,70 @@ export default function NamesScene() {
           overflow: 'hidden',
         }}
       >
-        {/* Warm depth glows */}
-        <div className="ns-glow-l" style={{
-          position: 'absolute',
-          top: '20%',
-          left: '-10%',
-          width: '50vw',
-          height: '50vw',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.05) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          opacity: 0,
-          filter: 'blur(30px)',
-        }} />
-        <div className="ns-glow-r" style={{
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1.5rem',
+          position: 'relative',
+          zIndex: 2,
+        }}>
+          <h2
+            className="ns-groom"
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontWeight: 300,
+              fontSize: 'clamp(3.5rem, 15vw, 8.5rem)',
+              color: '#4F3E39', // Dark luxury text
+              textTransform: 'uppercase',
+              letterSpacing: '0.12em',
+              lineHeight: 0.9,
+              opacity: 0,
+            }}
+          >
+            {eventConfig.groomName}
+          </h2>
+
+          <h2
+            className="ns-bride"
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontWeight: 300,
+              fontSize: 'clamp(3.5rem, 15vw, 8.5rem)',
+              color: '#4F3E39', // Dark luxury text
+              textTransform: 'uppercase',
+              letterSpacing: '0.12em',
+              lineHeight: 0.9,
+              opacity: 0,
+            }}
+          >
+            {eventConfig.brideName}
+          </h2>
+        </div>
+
+        <div style={{
           position: 'absolute',
           bottom: '20%',
-          right: '-10%',
-          width: '50vw',
-          height: '50vw',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.04) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          opacity: 0,
-          filter: 'blur(30px)',
-        }} />
-
-        {/* Names + ampersand */}
-        <div className="ns-groom" style={{ ...nameStyle, textAlign: 'center' }}>
-          {eventConfig.groomName}
-        </div>
-
-        <div
-          className="ns-amp"
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(1.8rem, 6vw, 3rem)',
-            color: '#D6B57A',
-            margin: '0.15em 0',
-            fontWeight: 300,
-            fontStyle: 'italic',
-            opacity: 0,
-          }}
-        >
-          &amp;
-        </div>
-
-        <div className="ns-bride" style={{ ...nameStyle, textAlign: 'center' }}>
-          {eventConfig.brideName}
-        </div>
-
-        {/* Subtext */}
-        <div style={{ marginTop: '2.5rem', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-          <p className="ns-two" style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '0.5rem',
+          zIndex: 2,
+        }}>
+          <p className="ns-sub1" style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
-            color: '#8F857B',
-            letterSpacing: '0.05em',
+            fontSize: '1rem',
+            color: '#8F7D78',
             opacity: 0,
           }}>
             Two stories.
           </p>
-          <p className="ns-one" style={{
+          <p className="ns-sub2" style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
-            color: '#8F857B',
-            letterSpacing: '0.05em',
-            marginTop: '0.5em',
+            fontSize: '1rem',
+            color: '#C79A8B', // Blush accent
             opacity: 0,
           }}>
             One promise.
