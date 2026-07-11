@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { eventConfig } from '../config/eventConfig';
 
-export default function EnvelopeIntro({ onOpen }) {
+export default function EnvelopeIntro({ onOpen, onInteraction }) {
   const containerRef = useRef(null);
   const [opened, setOpened] = useState(false);
 
@@ -47,6 +47,10 @@ export default function EnvelopeIntro({ onOpen }) {
   const handleOpen = () => {
     if (opened) return;
     setOpened(true);
+    
+    if (onInteraction) {
+      onInteraction();
+    }
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
