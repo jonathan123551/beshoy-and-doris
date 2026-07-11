@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import useLenis from './hooks/useLenis';
 import EnvelopeIntro from './components/EnvelopeIntro';
 import OpeningScene from './components/OpeningScene';
@@ -18,22 +18,15 @@ import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
   const [envelopeOpened, setEnvelopeOpened] = useState(false);
-  const musicPlayerRef = useRef(null);
   useLenis();
 
   return (
     <>
-      <MusicPlayer ref={musicPlayerRef} />
+      <MusicPlayer />
 
       {/* Envelope intro — blocks scroll until opened */}
       {!envelopeOpened && (
         <EnvelopeIntro 
-          onInteraction={() => {
-            // Synchronously trigger audio play on the actual click event
-            if (musicPlayerRef.current) {
-              musicPlayerRef.current.play();
-            }
-          }}
           onOpen={() => setEnvelopeOpened(true)} 
         />
       )}

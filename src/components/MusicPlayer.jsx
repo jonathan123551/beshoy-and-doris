@@ -1,99 +1,26 @@
-import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { toggleMusic, playMusic, dismissRetry, subscribeToAudio, initAudio } from '../utils/audioManager';
 
-const MusicPlayer = forwardRef((props, ref) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [playFailed, setPlayFailed] = useState(false);
-  const audioRef = useRef(null);
-
-  useImperativeHandle(ref, () => ({
-    play: async () => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0;
-        try {
-          await audioRef.current.play();
-          setIsPlaying(true);
-          setPlayFailed(false);
-          // Fade in slowly over 2 seconds
-          let vol = 0;
-          const fadeInterval = setInterval(() => {
-            if (vol < 0.15) {
-              vol += 0.01;
-              audioRef.current.volume = Math.min(vol, 0.15);
-            } else {
-              clearInterval(fadeInterval);
-            }
-          }, 100);
-        } catch (err) {
-          console.log('Audio autoplay blocked or failed:', err);
-          setPlayFailed(true);
-          setIsPlaying(false);
-        }
-      }
-    }
-  }));
+export default function MusicPlayer() {
+  const [state, setState] = useState({ isPlaying: false, playFailed: false });
 
   useEffect(() => {
-    const audio = new Audio('/audio/wedding-audio.mp3');
-    audio.loop = true;
-    audio.volume = 0.15; // Set base volume
-
-    const handleCanPlay = () => setIsLoaded(true);
-    audio.addEventListener('canplaythrough', handleCanPlay);
-
-    // Sync state if paused externally (e.g., system interrupt)
-    const handlePause = () => setIsPlaying(false);
-    const handlePlay = () => setIsPlaying(true);
-    
-    audio.addEventListener('pause', handlePause);
-    audio.addEventListener('play', handlePlay);
-
-    audioRef.current = audio;
-
-    return () => {
-      audio.removeEventListener('canplaythrough', handleCanPlay);
-      audio.removeEventListener('pause', handlePause);
-      audio.removeEventListener('play', handlePlay);
-      audio.pause();
-      audio.src = '';
-    };
+    // Initialize audio instance (does not play)
+    initAudio();
+    // Subscribe to state changes
+    const unsubscribe = subscribeToAudio(newState => {
+      setState(newState);
+    });
+    return unsubscribe;
   }, []);
 
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.volume = 0.15;
-      audioRef.current.play().then(() => {
-        setPlayFailed(false);
-      }).catch(err => {
-        console.log('Audio playback failed:', err);
-        setPlayFailed(true);
-      });
-    }
-  };
-
-  const handleRetry = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.15;
-      audioRef.current.play().then(() => {
-        setPlayFailed(false);
-        setIsPlaying(true);
-      }).catch(err => {
-        console.log('Retry failed:', err);
-      });
-    }
-  };
-
-  if (!isLoaded) return null;
+  const { isPlaying, playFailed } = state;
 
   return (
     <>
       <button
-        onClick={togglePlay}
+        onClick={toggleMusic}
         style={{
           position: 'fixed',
           bottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))',
@@ -178,7 +105,7 @@ const MusicPlayer = forwardRef((props, ref) => {
             Experience with sound
           </span>
           <button
-            onClick={handleRetry}
+            onClick={() => playMusic(false)}
             style={{
               fontFamily: "'Manrope', sans-serif",
               fontSize: '0.65rem',
@@ -200,7 +127,7 @@ const MusicPlayer = forwardRef((props, ref) => {
           </button>
           
           <button
-            onClick={() => setPlayFailed(false)}
+            onClick={dismissRetry}
             style={{
               background: 'none',
               border: 'none',
@@ -223,7 +150,4 @@ const MusicPlayer = forwardRef((props, ref) => {
       )}
     </>
   );
-});
-
-MusicPlayer.displayName = 'MusicPlayer';
-export default MusicPlayer;
+}

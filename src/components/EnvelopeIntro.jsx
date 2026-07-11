@@ -1,8 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { eventConfig } from '../config/eventConfig';
+import { playMusic } from '../utils/audioManager';
 
-export default function EnvelopeIntro({ onOpen, onInteraction }) {
+export default function EnvelopeIntro({ onOpen }) {
   const containerRef = useRef(null);
   const [opened, setOpened] = useState(false);
 
@@ -48,9 +49,8 @@ export default function EnvelopeIntro({ onOpen, onInteraction }) {
     if (opened) return;
     setOpened(true);
     
-    if (onInteraction) {
-      onInteraction();
-    }
+    // Call synchronously to satisfy iOS Safari restrictions
+    playMusic(true);
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
