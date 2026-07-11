@@ -117,7 +117,7 @@ export default function NamesScene() {
       style={{
         position: 'relative',
         height: '150svh',
-        background: '#0A0908',
+        background: '#161210',
       }}
     >
       <div
@@ -141,7 +141,7 @@ export default function NamesScene() {
           width: '50vw',
           height: '50vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201, 169, 110, 0.05) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.05) 0%, transparent 70%)',
           pointerEvents: 'none',
           opacity: 0,
           filter: 'blur(30px)',
@@ -153,7 +153,7 @@ export default function NamesScene() {
           width: '50vw',
           height: '50vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.04) 0%, transparent 70%)',
           pointerEvents: 'none',
           opacity: 0,
           filter: 'blur(30px)',
@@ -169,7 +169,7 @@ export default function NamesScene() {
           style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: 'clamp(1.8rem, 6vw, 3rem)',
-            color: '#C9A96E',
+            color: '#D6B57A',
             margin: '0.15em 0',
             fontWeight: 300,
             fontStyle: 'italic',
@@ -190,7 +190,7 @@ export default function NamesScene() {
             fontStyle: 'italic',
             fontWeight: 300,
             fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
-            color: '#8A8279',
+            color: '#8F857B',
             letterSpacing: '0.05em',
             opacity: 0,
           }}>
@@ -201,7 +201,7 @@ export default function NamesScene() {
             fontStyle: 'italic',
             fontWeight: 300,
             fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
-            color: '#8A8279',
+            color: '#8F857B',
             letterSpacing: '0.05em',
             marginTop: '0.5em',
             opacity: 0,

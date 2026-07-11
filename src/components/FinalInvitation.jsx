@@ -61,7 +61,7 @@ export default function FinalInvitation() {
     fontWeight: 400,
     letterSpacing: '0.15em',
     textTransform: 'uppercase',
-    color: '#C9A96E',
+    color: '#D6B57A',
     background: 'none',
     border: 'none',
     cursor: 'pointer',
@@ -76,7 +76,7 @@ export default function FinalInvitation() {
   const dividerStyle = {
     width: '25px',
     height: '1px',
-    background: 'rgba(201, 169, 110, 0.35)',
+    background: 'rgba(214, 181, 122, 0.35)',
     margin: '1.3em auto',
   };
 
@@ -86,7 +86,7 @@ export default function FinalInvitation() {
         position: 'relative',
         minHeight: '100vh',
         minHeight: '100dvh',
-        background: '#0A0908',
+        background: '#161210',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -104,7 +104,7 @@ export default function FinalInvitation() {
         maxWidth: '450px',
         maxHeight: '450px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.04) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
@@ -127,8 +127,8 @@ export default function FinalInvitation() {
             width: '60px',
             height: '60px',
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, rgba(201, 169, 110, 0.25), rgba(166, 158, 148, 0.15))',
-            border: '1px solid rgba(201, 169, 110, 0.2)',
+            background: 'linear-gradient(135deg, rgba(214, 181, 122, 0.25), rgba(166, 158, 148, 0.15))',
+            border: '1px solid rgba(214, 181, 122, 0.2)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -140,7 +140,7 @@ export default function FinalInvitation() {
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
             fontSize: '1.2rem',
-            color: '#C9A96E',
+            color: '#D6B57A',
           }}>
             B&D
           </span>
@@ -151,7 +151,7 @@ export default function FinalInvitation() {
           fontStyle: 'italic',
           fontWeight: 300,
           fontSize: 'clamp(1rem, 3vw, 1.3rem)',
-          color: '#8A8279',
+          color: '#8F857B',
           marginBottom: '2rem',
         }}>
           We saved a place for you.
@@ -166,9 +166,9 @@ export default function FinalInvitation() {
             fontWeight: 400,
             letterSpacing: '0.3em',
             textTransform: 'uppercase',
-            color: '#C9A96E',
+            color: '#D6B57A',
             background: 'transparent',
-            border: '1px solid rgba(201, 169, 110, 0.25)',
+            border: '1px solid rgba(214, 181, 122, 0.25)',
             padding: '1em 2.5em',
             cursor: 'pointer',
             transition: 'all 0.4s ease',
@@ -186,19 +186,19 @@ export default function FinalInvitation() {
           visibility: 'hidden',
           opacity: 0,
           background: 'linear-gradient(170deg, #1E1A16 0%, #12100E 100%)',
-          border: '1px solid rgba(201, 169, 110, 0.12)',
+          border: '1px solid rgba(214, 181, 122, 0.12)',
           maxWidth: '380px',
           width: '88vw',
           padding: 'clamp(2rem, 6vw, 3rem) clamp(1.5rem, 5vw, 2.5rem)',
           textAlign: 'center',
           transformStyle: 'preserve-3d',
-          boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 0 60px rgba(201, 169, 110, 0.03)',
+          boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 0 60px rgba(214, 181, 122, 0.03)',
           position: 'relative',
           zIndex: 2,
         }}
       >
         {/* Top ornament */}
-        <div style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #C9A96E, transparent)', margin: '0 auto 1.8rem' }} />
+        <div style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #D6B57A, transparent)', margin: '0 auto 1.8rem' }} />
 
         <h3 style={{
           fontFamily: "'Cormorant Garamond', serif",
@@ -215,7 +215,7 @@ export default function FinalInvitation() {
           display: 'block',
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: '1.1rem',
-          color: '#C9A96E',
+          color: '#D6B57A',
           margin: '0.4em 0',
           fontStyle: 'italic',
         }}>
@@ -240,7 +240,7 @@ export default function FinalInvitation() {
           fontSize: '0.65rem',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color: '#8A8279',
+          color: '#8F857B',
         }}>
           14 November 2026
         </p>
@@ -258,24 +258,24 @@ export default function FinalInvitation() {
         <div style={dividerStyle} />
 
         {/* Ceremony */}
-        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8A8279', marginBottom: '0.4em' }}>
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8F857B', marginBottom: '0.4em' }}>
           Ceremony
         </p>
         <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '1rem', color: '#F2ECE2' }}>
           {eventConfig.church.name}
         </p>
-        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#8A8279', marginBottom: '1.2em' }}>
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#8F857B', marginBottom: '1.2em' }}>
           {eventConfig.church.area}
         </p>
 
         {/* Reception */}
-        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8A8279', marginBottom: '0.4em' }}>
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8F857B', marginBottom: '0.4em' }}>
           Reception
         </p>
         <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '1rem', color: '#F2ECE2' }}>
           {eventConfig.reception.name}
         </p>
-        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#8A8279' }}>
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#8F857B' }}>
           {eventConfig.reception.area}
         </p>
 
@@ -308,7 +308,7 @@ export default function FinalInvitation() {
         </div>
 
         {/* Bottom ornament */}
-        <div style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #C9A96E, transparent)', margin: '1.8rem auto 0' }} />
+        <div style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #D6B57A, transparent)', margin: '1.8rem auto 0' }} />
       </div>
     </section>
   );

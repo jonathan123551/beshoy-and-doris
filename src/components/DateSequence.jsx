@@ -102,7 +102,7 @@ export default function DateSequence() {
       style={{
         position: 'relative',
         height: '180svh',
-        background: '#0A0908',
+        background: '#161210',
       }}
     >
       <div
@@ -126,7 +126,7 @@ export default function DateSequence() {
           maxWidth: '400px',
           maxHeight: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.04) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
 
@@ -147,9 +147,9 @@ export default function DateSequence() {
           opacity: 0,
         }}>
           <span>14</span>
-          <span style={{ color: '#C9A96E', fontSize: '0.7em' }}>.</span>
+          <span style={{ color: '#D6B57A', fontSize: '0.7em' }}>.</span>
           <span>11</span>
-          <span style={{ color: '#C9A96E', fontSize: '0.7em' }}>.</span>
+          <span style={{ color: '#D6B57A', fontSize: '0.7em' }}>.</span>
           <span>2026</span>
         </div>
 
@@ -164,7 +164,7 @@ export default function DateSequence() {
             fontSize: '0.65rem',
             letterSpacing: '0.3em',
             textTransform: 'uppercase',
-            color: '#8A8279',
+            color: '#8F857B',
             marginBottom: '0.4em',
           }}>
             Saturday

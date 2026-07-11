@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useLenis from './hooks/useLenis';
-import Preloader from './components/Preloader';
+import EnvelopeIntro from './components/EnvelopeIntro';
 import OpeningScene from './components/OpeningScene';
 import NamesScene from './components/NamesScene';
 import CeremonyScene from './components/CeremonyScene';
@@ -13,27 +13,30 @@ import PhotoStory from './components/PhotoStory';
 import InvitationMessage from './components/InvitationMessage';
 import FinalInvitation from './components/FinalInvitation';
 import FinalFrame from './components/FinalFrame';
-import GoldenParticles from './components/GoldenParticles';
+import AtmosphericParticles from './components/GoldenParticles';
 import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [envelopeOpened, setEnvelopeOpened] = useState(false);
   useLenis();
 
   return (
     <>
-      {loading && <Preloader onComplete={() => setLoading(false)} />}
+      {/* Envelope intro — blocks scroll until opened */}
+      {!envelopeOpened && (
+        <EnvelopeIntro onOpen={() => setEnvelopeOpened(true)} />
+      )}
 
-      {/* Global visual layers */}
-      {!loading && <GoldenParticles />}
-      {!loading && <MusicPlayer />}
+      {/* Global visual layers — only after envelope */}
+      {envelopeOpened && <AtmosphericParticles />}
+      {envelopeOpened && <MusicPlayer autoStart={envelopeOpened} />}
       <div className="film-grain" />
       <div className="vignette" />
 
       <main
         style={{
-          opacity: loading ? 0 : 1,
-          transition: 'opacity 0.6s ease',
+          opacity: envelopeOpened ? 1 : 0,
+          transition: 'opacity 0.8s ease',
         }}
       >
         <OpeningScene />

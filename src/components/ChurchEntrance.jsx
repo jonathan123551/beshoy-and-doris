@@ -66,7 +66,7 @@ export default function ChurchEntrance() {
       style={{
         position: 'relative',
         height: '110svh',
-        background: '#0A0908',
+        background: '#161210',
         overflow: 'hidden',
       }}
     >
@@ -79,7 +79,7 @@ export default function ChurchEntrance() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#0A0908',
+          background: '#161210',
         }}
       >
         {/* Door opening */}
@@ -89,7 +89,7 @@ export default function ChurchEntrance() {
             position: 'relative',
             width: '18vw',
             height: '35vh',
-            background: 'linear-gradient(180deg, rgba(242, 236, 226, 0.08) 0%, rgba(201, 169, 110, 0.04) 100%)',
+            background: 'linear-gradient(180deg, rgba(242, 236, 226, 0.08) 0%, rgba(214, 181, 122, 0.04) 100%)',
             overflow: 'hidden',
             borderRadius: '50% 50% 0 0 / 30% 30% 0 0',
           }}
@@ -99,7 +99,7 @@ export default function ChurchEntrance() {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(ellipse at 50% 60%, rgba(201, 169, 110, 0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at 50% 60%, rgba(214, 181, 122, 0.15) 0%, transparent 70%)',
               opacity: 0.3,
             }}
           />
@@ -111,7 +111,7 @@ export default function ChurchEntrance() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: '#0A0908',
+            background: '#161210',
             opacity: 0,
             pointerEvents: 'none',
           }}

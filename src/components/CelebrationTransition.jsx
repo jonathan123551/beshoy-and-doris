@@ -78,7 +78,7 @@ export default function CelebrationTransition() {
       style={{
         position: 'relative',
         height: '130svh',
-        background: '#0A0908',
+        background: '#161210',
         overflow: 'hidden',
       }}
     >
@@ -100,7 +100,7 @@ export default function CelebrationTransition() {
           fontStyle: 'italic',
           fontWeight: 300,
           fontSize: '1.1rem',
-          color: '#8A8279',
+          color: '#8F857B',
           position: 'absolute',
           opacity: 0,
         }}>
@@ -112,7 +112,7 @@ export default function CelebrationTransition() {
           fontStyle: 'italic',
           fontWeight: 300,
           fontSize: 'clamp(1.4rem, 5vw, 2.2rem)',
-          color: '#8A8279',
+          color: '#8F857B',
           margin: 0,
           whiteSpace: 'nowrap',
           transformOrigin: 'center center',

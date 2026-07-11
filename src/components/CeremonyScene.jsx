@@ -95,7 +95,7 @@ export default function CeremonyScene() {
       style={{
         position: 'relative',
         height: '170svh',
-        background: '#0A0908',
+        background: '#161210',
       }}
     >
       <div
@@ -119,7 +119,7 @@ export default function CeremonyScene() {
             inset: '-15%',
             background: `
               radial-gradient(ellipse at 50% 30%, rgba(42, 36, 30, 0.6) 0%, transparent 60%),
-              radial-gradient(circle at 50% 70%, rgba(30, 26, 22, 0.4) 0%, #0A0908 70%)
+              radial-gradient(circle at 50% 70%, rgba(30, 26, 22, 0.4) 0%, #161210 70%)
             `,
             zIndex: 1,
           }}
@@ -141,7 +141,7 @@ export default function CeremonyScene() {
               fontSize: '0.6rem',
               letterSpacing: '0.35em',
               textTransform: 'uppercase',
-              color: '#8A8279',
+              color: '#8F857B',
             }}>
               The Ceremony
             </span>
@@ -162,7 +162,7 @@ export default function CeremonyScene() {
             <p style={{
               fontFamily: "'Manrope', sans-serif",
               fontSize: '0.7rem',
-              color: '#8A8279',
+              color: '#8F857B',
               marginTop: '0.4em',
               letterSpacing: '0.1em',
             }}>
@@ -191,7 +191,7 @@ export default function CeremonyScene() {
               style={{
                 fontFamily: "'Amiri', serif",
                 fontSize: '0.85rem',
-                color: '#8A8279',
+                color: '#8F857B',
                 marginTop: '0.15em',
               }}
             >
@@ -203,9 +203,9 @@ export default function CeremonyScene() {
           <div className="cer-text" style={{ marginBottom: '2.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
               <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: '#F2ECE2', fontWeight: 300 }}>14</span>
-              <span style={{ width: '1px', height: '18px', background: 'rgba(201, 169, 110, 0.4)' }} />
-              <span style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.65rem', letterSpacing: '0.15em', color: '#8A8279', textTransform: 'uppercase' }}>November 2026</span>
-              <span style={{ width: '1px', height: '18px', background: 'rgba(201, 169, 110, 0.4)' }} />
+              <span style={{ width: '1px', height: '18px', background: 'rgba(214, 181, 122, 0.4)' }} />
+              <span style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.65rem', letterSpacing: '0.15em', color: '#8F857B', textTransform: 'uppercase' }}>November 2026</span>
+              <span style={{ width: '1px', height: '18px', background: 'rgba(214, 181, 122, 0.4)' }} />
               <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1rem, 3vw, 1.3rem)', color: '#F2ECE2', fontWeight: 300 }}>{eventConfig.displayTime}</span>
             </div>
           </div>
@@ -225,18 +225,18 @@ export default function CeremonyScene() {
                   fontWeight: 400,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: '#C9A96E',
+                  color: '#D6B57A',
                 }}>
                   Open Church Location
                 </span>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#D6B57A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
                 </svg>
               </div>
               <span dir="rtl" lang="ar" style={{
                 fontFamily: "'Amiri', serif",
                 fontSize: '0.75rem',
-                color: '#8A8279',
+                color: '#8F857B',
                 marginTop: '0.25em',
               }}>
                 الموقع على الخريطة

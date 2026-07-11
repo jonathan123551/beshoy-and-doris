@@ -70,7 +70,7 @@ export default function Countdown() {
       style={{
         position: 'relative',
         minHeight: '50vh',
-        background: '#0A0908',
+        background: '#161210',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -86,7 +86,7 @@ export default function Countdown() {
         maxWidth: '350px',
         maxHeight: '350px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.03) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.03) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -96,7 +96,7 @@ export default function Countdown() {
           fontStyle: 'italic',
           fontWeight: 300,
           fontSize: 'clamp(1rem, 3vw, 1.3rem)',
-          color: '#8A8279',
+          color: '#8F857B',
           textAlign: 'center',
         }}>
           Today became a memory.
@@ -137,7 +137,7 @@ export default function Countdown() {
                   fontWeight: 400,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: '#8A8279',
+                  color: '#8F857B',
                   display: 'block',
                   marginTop: '0.7em',
                 }}>

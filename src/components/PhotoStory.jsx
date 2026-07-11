@@ -10,7 +10,7 @@ function PhotoImage({ photo, className, style }) {
   return (
     <div className={className} style={{ overflow: 'hidden', ...style }}>
       {error ? (
-        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #1E1A16 0%, #0A0908 100%)' }} />
+        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #1E1A16 0%, #161210 100%)' }} />
       ) : (
         <img
           src={photo.src}
@@ -146,7 +146,7 @@ export default function PhotoStory() {
       style={{
         position: 'relative',
         height: isDual ? '160svh' : '140svh',
-        background: '#0A0908',
+        background: '#161210',
       }}
     >
       <div
@@ -159,7 +159,7 @@ export default function PhotoStory() {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
-          background: '#0A0908',
+          background: '#161210',
         }}
       >
         {/* Background typography */}
@@ -246,7 +246,7 @@ export default function PhotoStory() {
           fontStyle: 'italic',
           fontWeight: 300,
           fontSize: '0.9rem',
-          color: '#8A8279',
+          color: '#8F857B',
           zIndex: 5,
           opacity: 0,
         }}>

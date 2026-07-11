@@ -59,7 +59,7 @@ export default function FinalFrame() {
       style={{
         position: 'relative',
         minHeight: '60vh',
-        background: '#0A0908',
+        background: '#161210',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -77,7 +77,7 @@ export default function FinalFrame() {
         maxWidth: '250px',
         maxHeight: '250px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.03) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.03) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -105,7 +105,7 @@ export default function FinalFrame() {
           fontSize: '0.7rem',
           fontWeight: 400,
           letterSpacing: '0.2em',
-          color: '#8A8279',
+          color: '#8F857B',
           marginTop: '0.8em',
           opacity: 0,
           position: 'relative',
@@ -120,7 +120,7 @@ export default function FinalFrame() {
         style={{
           width: '1px',
           height: '50px',
-          background: 'linear-gradient(180deg, #C9A96E, rgba(201, 169, 110, 0.1))',
+          background: 'linear-gradient(180deg, #D6B57A, rgba(214, 181, 122, 0.1))',
           margin: '2rem auto',
           transformOrigin: 'top center',
           transform: 'scaleY(0)',
@@ -136,7 +136,7 @@ export default function FinalFrame() {
           fontStyle: 'italic',
           fontWeight: 300,
           fontSize: '0.9rem',
-          color: '#8A8279',
+          color: '#8F857B',
           opacity: 0,
           position: 'relative',
           zIndex: 2,

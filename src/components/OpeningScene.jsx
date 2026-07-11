@@ -135,7 +135,7 @@ export default function OpeningScene() {
       style={{
         position: 'relative',
         height: '120svh',
-        background: '#0A0908',
+        background: '#161210',
         overflow: 'hidden',
       }}
     >
@@ -152,7 +152,7 @@ export default function OpeningScene() {
           maxWidth: '500px',
           maxHeight: '500px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201, 169, 110, 0.07) 0%, rgba(201, 169, 110, 0.02) 40%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(214, 181, 122, 0.07) 0%, rgba(214, 181, 122, 0.02) 40%, transparent 70%)',
           pointerEvents: 'none',
           opacity: 0,
         }}
@@ -257,14 +257,14 @@ export default function OpeningScene() {
               fontFamily: "'Manrope', sans-serif",
               fontSize: '0.55rem',
               letterSpacing: '0.35em',
-              color: '#8A8279',
+              color: '#8F857B',
               textTransform: 'uppercase',
               marginBottom: '0.8rem',
             }}>
               Scroll
             </span>
             <div style={{ width: '1px', height: '32px', background: 'rgba(138, 130, 121, 0.15)', position: 'relative', overflow: 'hidden' }}>
-              <div className="hint-line" style={{ width: '100%', height: '40%', background: 'rgba(201, 169, 110, 0.5)', position: 'absolute', top: 0 }} />
+              <div className="hint-line" style={{ width: '100%', height: '40%', background: 'rgba(214, 181, 122, 0.5)', position: 'absolute', top: 0 }} />
             </div>
           </div>
         </div>

@@ -63,7 +63,7 @@ export default function InvitationMessage() {
       style={{
         position: 'relative',
         minHeight: '70vh',
-        background: '#0A0908',
+        background: '#161210',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -80,7 +80,7 @@ export default function InvitationMessage() {
         maxWidth: '300px',
         maxHeight: '300px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.04) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -88,7 +88,7 @@ export default function InvitationMessage() {
       <div className="msg-divider" style={{
         width: '30px',
         height: '1px',
-        background: 'rgba(201, 169, 110, 0.4)',
+        background: 'rgba(214, 181, 122, 0.4)',
         marginBottom: '3rem',
         transformOrigin: 'center',
         transform: 'scaleX(0)',

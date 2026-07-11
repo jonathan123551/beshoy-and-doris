@@ -56,7 +56,7 @@ export default function ReceptionScene() {
       style={{
         position: 'relative',
         minHeight: '100dvh',
-        background: '#0A0908',
+        background: '#161210',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -69,7 +69,7 @@ export default function ReceptionScene() {
       <div className="rec-orb" style={{
         position: 'absolute', top: '15%', left: '5%',
         width: '55vw', height: '55vw',
-        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.1) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(214, 181, 122, 0.1) 0%, transparent 65%)',
         filter: 'blur(50px)', pointerEvents: 'none',
       }} />
       <div className="rec-orb" style={{
@@ -92,7 +92,7 @@ export default function ReceptionScene() {
             fontSize: '0.6rem',
             letterSpacing: '0.35em',
             textTransform: 'uppercase',
-            color: '#8A8279',
+            color: '#8F857B',
           }}>
             The Reception
           </span>
@@ -112,7 +112,7 @@ export default function ReceptionScene() {
           <p style={{
             fontFamily: "'Manrope', sans-serif",
             fontSize: '0.7rem',
-            color: '#8A8279',
+            color: '#8F857B',
             marginTop: '0.5em',
             letterSpacing: '0.1em',
           }}>
@@ -126,7 +126,7 @@ export default function ReceptionScene() {
             fontStyle: 'italic',
             fontWeight: 300,
             fontSize: 'clamp(1rem, 3vw, 1.3rem)',
-            color: '#C9A96E',
+            color: '#D6B57A',
           }}>
             Dinner. Music. Memories.
           </p>
@@ -146,18 +146,18 @@ export default function ReceptionScene() {
                 fontWeight: 400,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
-                color: '#C9A96E',
+                color: '#D6B57A',
               }}>
                 Open Reception Location
               </span>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#D6B57A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
               </svg>
             </div>
             <span dir="rtl" lang="ar" style={{
               fontFamily: "'Amiri', serif",
               fontSize: '0.75rem',
-              color: '#8A8279',
+              color: '#8F857B',
               marginTop: '0.25em',
             }}>
               الموقع على الخريطة
