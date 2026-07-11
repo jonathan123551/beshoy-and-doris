@@ -6,28 +6,39 @@ import { generateICS } from '../utils/calendar';
 export default function FinalInvitation() {
   const cardRef = useRef(null);
   const ctaRef = useRef(null);
+  const sealRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
     if (isOpen) return;
     setIsOpen(true);
 
-    // Hide CTA
-    gsap.to(ctaRef.current, {
+    const tl = gsap.timeline();
+
+    // Seal shrinks and fades
+    tl.to(sealRef.current, {
+      scale: 0,
+      opacity: 0,
+      duration: 0.5,
+      ease: 'back.in(2)',
+    });
+
+    // CTA fades
+    tl.to(ctaRef.current, {
       opacity: 0,
       y: -10,
       duration: 0.4,
       ease: 'power2.in',
-    });
+    }, '-=0.3');
 
-    // Reveal card
-    gsap.fromTo(
-      cardRef.current,
+    // Card reveals with luxury feel
+    tl.fromTo(cardRef.current,
       {
         opacity: 0,
-        scale: 0.85,
-        rotateX: 8,
-        y: 40,
+        scale: 0.88,
+        rotateX: 6,
+        y: 30,
+        filter: 'blur(8px)',
         visibility: 'hidden',
       },
       {
@@ -35,35 +46,38 @@ export default function FinalInvitation() {
         scale: 1,
         rotateX: 0,
         y: 0,
+        filter: 'blur(0px)',
         visibility: 'visible',
-        duration: 1.2,
+        duration: 1.4,
         ease: 'power3.out',
-        delay: 0.3,
-      }
+      },
+      '-=0.1'
     );
   };
 
   const actionStyle = {
     fontFamily: "'Manrope', sans-serif",
-    fontSize: '0.65rem',
+    fontSize: '0.6rem',
     fontWeight: 400,
     letterSpacing: '0.15em',
     textTransform: 'uppercase',
-    color: '#C7A66A',
+    color: '#C9A96E',
     background: 'none',
     border: 'none',
     cursor: 'pointer',
-    padding: '0.5em 0',
+    padding: '0.6em 0',
     textDecoration: 'none',
     display: 'inline-block',
     transition: 'opacity 0.3s',
+    minHeight: '44px',
+    minWidth: '44px',
   };
 
   const dividerStyle = {
-    width: '30px',
+    width: '25px',
     height: '1px',
-    background: 'rgba(199, 166, 106, 0.4)',
-    margin: '1.5em auto',
+    background: 'rgba(201, 169, 110, 0.35)',
+    margin: '1.3em auto',
   };
 
   return (
@@ -71,33 +85,75 @@ export default function FinalInvitation() {
       style={{
         position: 'relative',
         minHeight: '100vh',
-        background: '#0B0A09',
+        minHeight: '100dvh',
+        background: '#0A0908',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '10vh 1.5rem',
+        padding: '8vh 1.5rem',
         perspective: '1000px',
+        overflow: 'hidden',
       }}
     >
-      {/* Pre-open text + CTA */}
+      {/* Warm radial backdrop */}
+      <div style={{
+        position: 'absolute',
+        width: '80vw',
+        height: '80vw',
+        maxWidth: '450px',
+        maxHeight: '450px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 65%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Pre-open: Seal + CTA */}
       <div
         ref={ctaRef}
         style={{
           textAlign: 'center',
-          display: isOpen ? 'none' : 'block',
+          display: isOpen ? 'none' : 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          position: 'relative',
+          zIndex: 2,
         }}
       >
-        <p
+        {/* Wax seal */}
+        <div
+          ref={sealRef}
           style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: 'clamp(1rem, 3vw, 1.3rem)',
-            color: '#9A9185',
-            marginBottom: '2.5rem',
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, rgba(201, 169, 110, 0.25), rgba(166, 158, 148, 0.15))',
+            border: '1px solid rgba(201, 169, 110, 0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '2rem',
+            boxShadow: '0 8px 25px rgba(0,0,0,0.3)',
           }}
         >
+          <span style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            fontSize: '1.2rem',
+            color: '#C9A96E',
+          }}>
+            B&D
+          </span>
+        </div>
+
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontWeight: 300,
+          fontSize: 'clamp(1rem, 3vw, 1.3rem)',
+          color: '#8A8279',
+          marginBottom: '2rem',
+        }}>
           We saved a place for you.
         </p>
 
@@ -106,224 +162,153 @@ export default function FinalInvitation() {
           aria-label="Open the invitation"
           style={{
             fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.7rem',
+            fontSize: '0.65rem',
             fontWeight: 400,
             letterSpacing: '0.3em',
             textTransform: 'uppercase',
-            color: '#C7A66A',
+            color: '#C9A96E',
             background: 'transparent',
-            border: '1px solid rgba(199, 166, 106, 0.3)',
+            border: '1px solid rgba(201, 169, 110, 0.25)',
             padding: '1em 2.5em',
             cursor: 'pointer',
-            transition: 'border-color 0.4s, box-shadow 0.4s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(199, 166, 106, 0.6)';
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(199, 166, 106, 0.08)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(199, 166, 106, 0.3)';
-            e.currentTarget.style.boxShadow = 'none';
+            transition: 'all 0.4s ease',
+            minHeight: '44px',
           }}
         >
           Open the Invitation
         </button>
       </div>
 
-      {/* Invitation Card */}
+      {/* Luxury Invitation Card */}
       <div
         ref={cardRef}
         style={{
           visibility: 'hidden',
           opacity: 0,
-          background: '#241F1A',
-          border: '1px solid rgba(199, 166, 106, 0.15)',
-          maxWidth: '400px',
-          width: '85vw',
-          padding: 'clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2rem)',
+          background: 'linear-gradient(170deg, #1E1A16 0%, #12100E 100%)',
+          border: '1px solid rgba(201, 169, 110, 0.12)',
+          maxWidth: '380px',
+          width: '88vw',
+          padding: 'clamp(2rem, 6vw, 3rem) clamp(1.5rem, 5vw, 2.5rem)',
           textAlign: 'center',
           transformStyle: 'preserve-3d',
+          boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 0 60px rgba(201, 169, 110, 0.03)',
+          position: 'relative',
+          zIndex: 2,
         }}
       >
         {/* Top ornament */}
-        <div style={{ width: '40px', height: '1px', background: '#C7A66A', margin: '0 auto 2rem' }} />
+        <div style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #C9A96E, transparent)', margin: '0 auto 1.8rem' }} />
 
-        <h3
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: '2rem',
-            color: '#F4EFE6',
-            lineHeight: 1.2,
-          }}
-        >
+        <h3 style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontWeight: 300,
+          fontSize: 'clamp(1.8rem, 6vw, 2.2rem)',
+          color: '#F2ECE2',
+          lineHeight: 1.2,
+        }}>
           {eventConfig.brideName}
         </h3>
 
-        <span
-          style={{
-            display: 'block',
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: '1.2rem',
-            color: '#C7A66A',
-            margin: '0.5em 0',
-          }}
-        >
+        <span style={{
+          display: 'block',
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: '1.1rem',
+          color: '#C9A96E',
+          margin: '0.4em 0',
+          fontStyle: 'italic',
+        }}>
           &amp;
         </span>
 
-        <h3
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: '2rem',
-            color: '#F4EFE6',
-            lineHeight: 1.2,
-          }}
-        >
+        <h3 style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontWeight: 300,
+          fontSize: 'clamp(1.8rem, 6vw, 2.2rem)',
+          color: '#F2ECE2',
+          lineHeight: 1.2,
+        }}>
           {eventConfig.groomName}
         </h3>
 
         <div style={dividerStyle} />
 
-        <p
-          style={{
-            fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.7rem',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: '#9A9185',
-          }}
-        >
+        <p style={{
+          fontFamily: "'Manrope', sans-serif",
+          fontSize: '0.65rem',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          color: '#8A8279',
+        }}>
           14 November 2026
         </p>
 
-        <p
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: '1rem',
-            fontWeight: 300,
-            color: '#F4EFE6',
-            marginTop: '0.5em',
-          }}
-        >
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: '1rem',
+          fontWeight: 300,
+          color: '#F2ECE2',
+          marginTop: '0.4em',
+        }}>
           {eventConfig.displayTime}
         </p>
 
         <div style={dividerStyle} />
 
         {/* Ceremony */}
-        <p
-          style={{
-            fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.6rem',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: '#9A9185',
-            marginBottom: '0.5em',
-          }}
-        >
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8A8279', marginBottom: '0.4em' }}>
           Ceremony
         </p>
-        <p
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontSize: '1rem',
-            color: '#F4EFE6',
-          }}
-        >
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '1rem', color: '#F2ECE2' }}>
           {eventConfig.church.name}
         </p>
-        <p
-          style={{
-            fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.75rem',
-            color: '#9A9185',
-            marginBottom: '1.5em',
-          }}
-        >
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#8A8279', marginBottom: '1.2em' }}>
           {eventConfig.church.area}
         </p>
 
         {/* Reception */}
-        <p
-          style={{
-            fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.6rem',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: '#9A9185',
-            marginBottom: '0.5em',
-          }}
-        >
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8A8279', marginBottom: '0.4em' }}>
           Reception
         </p>
-        <p
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontSize: '1rem',
-            color: '#F4EFE6',
-          }}
-        >
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '1rem', color: '#F2ECE2' }}>
           {eventConfig.reception.name}
         </p>
-        <p
-          style={{
-            fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.75rem',
-            color: '#9A9185',
-          }}
-        >
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#8A8279' }}>
           {eventConfig.reception.area}
         </p>
 
         <div style={dividerStyle} />
 
         {/* Actions */}
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '1.5em',
-          }}
-        >
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.2em' }}>
           <a
             href={eventConfig.church.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
             style={actionStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            Church Location
+            Church ↗
           </a>
           <a
             href={eventConfig.reception.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
             style={actionStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            Reception Location
+            Reception ↗
           </a>
           <button
             onClick={() => generateICS(eventConfig)}
             style={actionStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            Add to Calendar
+            Calendar +
           </button>
         </div>
 
         {/* Bottom ornament */}
-        <div style={{ width: '40px', height: '1px', background: '#C7A66A', margin: '2rem auto 0' }} />
+        <div style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #C9A96E, transparent)', margin: '1.8rem auto 0' }} />
       </div>
     </section>
   );

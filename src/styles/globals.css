@@ -1,14 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Manrope:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Manrope:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-  --color-black: #0B0A09;
-  --color-ivory: #F4EFE6;
-  --color-champagne: #C7A66A;
-  --color-stone: #9A9185;
-  --color-brown: #241F1A;
+  /* ── Warm Romantic Palette ── */
+  --color-black: #0A0908;
+  --color-deep: #12100E;
+  --color-brown: #1E1A16;
+  --color-chocolate: #2A241E;
+  --color-stone: #8A8279;
+  --color-warm-gray: #A69E94;
+  --color-champagne: #C9A96E;
+  --color-gold-soft: #D4B87A;
+  --color-cream: #E8DDD0;
+  --color-ivory: #F2ECE2;
+  --color-beige: #F7F2EB;
 
+  /* ── Typography ── */
   --font-serif: 'Cormorant Garamond', 'Georgia', serif;
   --font-sans: 'Manrope', 'Helvetica Neue', sans-serif;
+  --font-arabic: 'Amiri', 'Cormorant Garamond', serif;
+
+  /* ── Mobile-first spacing ── */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 8rem;
+  --space-section: 6vh;
+}
+
+@media (min-width: 769px) {
+  :root {
+    --space-section: 10vh;
+  }
 }
 
 *, *::before, *::after {
@@ -63,37 +86,29 @@ img {
   max-width: 100%;
 }
 
-/* Film grain overlay */
+/* ── Film grain overlay ── */
 .film-grain {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  opacity: 0.035;
+  opacity: 0.025;
   pointer-events: none;
-  z-index: 10;
+  z-index: 100;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
   mix-blend-mode: overlay;
 }
 
-/* Shared section styles */
-.section-pinned {
-  position: relative;
-  overflow: hidden;
+/* ── Warm vignette overlay ── */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(10, 9, 8, 0.4) 100%);
 }
 
-.section-pinned__inner {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Reduced motion */
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -102,21 +117,45 @@ img {
   }
 }
 
-/* Scrollbar styling */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 2px;
 }
-
 ::-webkit-scrollbar-track {
   background: var(--color-black);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--color-brown);
+  background: var(--color-chocolate);
 }
 
-/* Selection */
+/* ── Selection ── */
 ::selection {
   background: var(--color-champagne);
   color: var(--color-black);
+}
+
+/* ── Smooth CTA transitions ── */
+.cta-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-height: 44px;
+  padding: 0.8rem 2rem;
+  border: 1px solid rgba(201, 169, 110, 0.25);
+  background: rgba(10, 9, 8, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 2px;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+}
+.cta-link:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) {
+  .cta-link:hover {
+    border-color: rgba(201, 169, 110, 0.5);
+    box-shadow: 0 0 40px rgba(201, 169, 110, 0.06);
+  }
 }

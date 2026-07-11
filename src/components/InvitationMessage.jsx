@@ -19,22 +19,39 @@ export default function InvitationMessage() {
 
     const ctx = gsap.context(() => {
       const els = sectionRef.current.querySelectorAll('.msg-line');
-      gsap.fromTo(
-        els,
-        { opacity: 0, y: 25 },
+      const divider = sectionRef.current.querySelector('.msg-divider');
+
+      gsap.fromTo(els,
+        { opacity: 0, y: 20, filter: 'blur(3px)' },
         {
           opacity: 1,
           y: 0,
-          stagger: 0.15,
+          filter: 'blur(0px)',
+          stagger: 0.12,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 70%',
-            end: 'center 50%',
+            start: 'top 75%',
+            end: 'center 55%',
             scrub: true,
           },
         }
       );
+
+      if (divider) {
+        gsap.fromTo(divider,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 65%',
+              end: 'center 55%',
+              scrub: true,
+            },
+          }
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -45,15 +62,38 @@ export default function InvitationMessage() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '80vh',
-        background: '#0B0A09',
+        minHeight: '70vh',
+        background: '#0A0908',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '15vh 2rem',
+        padding: '10vh 2rem',
+        overflow: 'hidden',
       }}
     >
+      {/* Warm glow */}
+      <div style={{
+        position: 'absolute',
+        width: '50vw',
+        height: '50vw',
+        maxWidth: '300px',
+        maxHeight: '300px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Decorative divider */}
+      <div className="msg-divider" style={{
+        width: '30px',
+        height: '1px',
+        background: 'rgba(201, 169, 110, 0.4)',
+        marginBottom: '3rem',
+        transformOrigin: 'center',
+        transform: 'scaleX(0)',
+      }} />
+
       {lines.map((line, i) => (
         <p
           key={i}
@@ -62,13 +102,15 @@ export default function InvitationMessage() {
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
             fontWeight: 300,
-            fontSize: 'clamp(1rem, 3vw, 1.4rem)',
-            color: '#F4EFE6',
+            fontSize: 'clamp(1.1rem, 3.5vw, 1.5rem)',
+            color: '#F2ECE2',
             textAlign: 'center',
-            lineHeight: 1.6,
-            marginBottom: '1.5em',
+            lineHeight: 1.7,
+            marginBottom: '1.2em',
             opacity: 0,
-            maxWidth: '500px',
+            maxWidth: '420px',
+            position: 'relative',
+            zIndex: 2,
           }}
         >
           {line}

@@ -13,6 +13,8 @@ import PhotoStory from './components/PhotoStory';
 import InvitationMessage from './components/InvitationMessage';
 import FinalInvitation from './components/FinalInvitation';
 import FinalFrame from './components/FinalFrame';
+import GoldenParticles from './components/GoldenParticles';
+import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -22,10 +24,16 @@ export default function App() {
     <>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
 
+      {/* Global visual layers */}
+      {!loading && <GoldenParticles />}
+      {!loading && <MusicPlayer />}
+      <div className="film-grain" />
+      <div className="vignette" />
+
       <main
         style={{
           opacity: loading ? 0 : 1,
-          transition: 'opacity 0.5s ease',
+          transition: 'opacity 0.6s ease',
         }}
       >
         <OpeningScene />

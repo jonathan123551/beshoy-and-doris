@@ -12,15 +12,16 @@ export default function CelebrationTransition() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const line1 = sectionRef.current.querySelector('.celeb-line-1');
-      const line2 = sectionRef.current.querySelector('.celeb-line-2');
-      const inner = sectionRef.current.querySelector('.celeb-inner');
+      const line1 = sectionRef.current.querySelector('.ct-1');
+      const line2 = sectionRef.current.querySelector('.ct-2');
+      const inner = sectionRef.current.querySelector('.ct-inner');
+      const warmFlash = sectionRef.current.querySelector('.ct-flash');
 
       const mm = gsap.matchMedia();
 
       mm.add({
-        isMobile: "(max-width: 768px)",
-        isDesktop: "(min-width: 769px)"
+        isMobile: '(max-width: 768px)',
+        isDesktop: '(min-width: 769px)',
       }, (context) => {
         const { isMobile } = context.conditions;
 
@@ -34,25 +35,37 @@ export default function CelebrationTransition() {
           },
         });
 
-        // "And then…" appears quickly
-        tl.fromTo(line1, { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, isMobile ? 0.05 : 0.1);
-        
-        // "we celebrate." appears
-        tl.fromTo(line2, { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, isMobile ? 0.2 : 0.3);
-
-        // "And then…" fades out
-        tl.to(line1, { opacity: 0, y: -10 }, isMobile ? 0.35 : 0.4);
-
-        // "we celebrate." dramatically scales up
-        tl.to(
-          line2,
-          {
-            scale: isMobile ? 30 : 20, // scales up massively to fill screen
-            color: '#F4EFE6',
-            ease: 'power2.in',
-          },
-          isMobile ? 0.4 : 0.5
+        // "And then…" appears immediately
+        tl.fromTo(line1,
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0 },
+          0.02
         );
+
+        // "we celebrate." enters
+        tl.fromTo(line2,
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0 },
+          isMobile ? 0.15 : 0.2
+        );
+
+        // "And then…" fades
+        tl.to(line1, { opacity: 0, y: -8 }, isMobile ? 0.3 : 0.35);
+
+        // "we celebrate." scales up massively
+        tl.to(line2, {
+          scale: isMobile ? 25 : 18,
+          color: '#F2ECE2',
+          ease: 'power2.in',
+        }, isMobile ? 0.35 : 0.45);
+
+        // Warm flash as text fills viewport
+        tl.fromTo(warmFlash,
+          { opacity: 0 },
+          { opacity: 0.12, ease: 'power2.in' },
+          0.7
+        );
+        tl.to(warmFlash, { opacity: 0 }, 0.9);
       });
     }, sectionRef);
 
@@ -64,24 +77,16 @@ export default function CelebrationTransition() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: 'var(--celeb-height, 250vh)',
-        background: '#0B0A09',
+        height: '130svh',
+        background: '#0A0908',
         overflow: 'hidden',
       }}
     >
-      <style>{`
-        @media (max-width: 768px) {
-          section {
-            --celeb-height: 140svh;
-          }
-        }
-      `}</style>
       <div
-        className="celeb-inner"
+        className="ct-inner"
         style={{
           position: 'relative',
           width: '100%',
-          height: '100vh',
           height: '100dvh',
           display: 'flex',
           flexDirection: 'column',
@@ -90,38 +95,40 @@ export default function CelebrationTransition() {
           overflow: 'hidden',
         }}
       >
-        <p
-          className="celeb-line-1"
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: '1.2rem',
-            color: '#9A9185',
-            position: 'absolute',
-            opacity: 0,
-            transform: 'translateY(-2rem)',
-          }}
-        >
+        <p className="ct-1" style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontWeight: 300,
+          fontSize: '1.1rem',
+          color: '#8A8279',
+          position: 'absolute',
+          opacity: 0,
+        }}>
           And then…
         </p>
 
-        <p
-          className="celeb-line-2"
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-            color: '#9A9185', // Transitions to #F4EFE6 via GSAP
-            margin: 0,
-            whiteSpace: 'nowrap',
-            transformOrigin: 'center center',
-            opacity: 0,
-          }}
-        >
+        <p className="ct-2" style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontWeight: 300,
+          fontSize: 'clamp(1.4rem, 5vw, 2.2rem)',
+          color: '#8A8279',
+          margin: 0,
+          whiteSpace: 'nowrap',
+          transformOrigin: 'center center',
+          opacity: 0,
+        }}>
           we celebrate.
         </p>
+
+        {/* Warm flash overlay */}
+        <div className="ct-flash" style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(circle, rgba(212, 184, 122, 0.3) 0%, transparent 60%)',
+          opacity: 0,
+          pointerEvents: 'none',
+        }} />
       </div>
     </section>
   );

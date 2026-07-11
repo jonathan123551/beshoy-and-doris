@@ -13,17 +13,17 @@ export default function FinalFrame() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const texts = sectionRef.current.querySelectorAll('.final-text');
-      const line = sectionRef.current.querySelector('.final-line');
+      const texts = sectionRef.current.querySelectorAll('.ff-text');
+      const line = sectionRef.current.querySelector('.ff-line');
 
-      gsap.fromTo(
-        texts,
-        { opacity: 0, y: 20 },
+      gsap.fromTo(texts,
+        { opacity: 0, y: 15, filter: 'blur(3px)' },
         {
           opacity: 1,
           y: 0,
-          stagger: 0.2,
-          duration: 0.8,
+          filter: 'blur(0px)',
+          stagger: 0.15,
+          duration: 0.9,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -33,19 +33,17 @@ export default function FinalFrame() {
         }
       );
 
-      // Line fades out on scroll
       if (line) {
-        gsap.fromTo(
-          line,
-          { opacity: 1, scaleY: 1 },
+        gsap.fromTo(line,
+          { scaleY: 0 },
           {
-            opacity: 0,
-            scaleY: 0.3,
+            scaleY: 1,
+            duration: 1.2,
+            ease: 'power2.out',
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: 'center center',
-              end: 'bottom top',
-              scrub: true,
+              start: 'top 70%',
+              toggleActions: 'play none none none',
             },
           }
         );
@@ -60,66 +58,88 @@ export default function FinalFrame() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '80vh',
-        background: '#0B0A09',
+        minHeight: '60vh',
+        background: '#0A0908',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '10vh 2rem 20vh',
+        padding: '8vh 2rem calc(8vh + env(safe-area-inset-bottom, 0px))',
         textAlign: 'center',
+        overflow: 'hidden',
       }}
     >
+      {/* Warm glow */}
+      <div style={{
+        position: 'absolute',
+        width: '40vw',
+        height: '40vw',
+        maxWidth: '250px',
+        maxHeight: '250px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.03) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
       <h2
-        className="final-text"
+        className="ff-text"
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
           fontWeight: 300,
-          fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-          color: '#F4EFE6',
+          fontSize: 'clamp(1.6rem, 5vw, 2.8rem)',
+          color: '#F2ECE2',
           lineHeight: 1.2,
           opacity: 0,
+          position: 'relative',
+          zIndex: 2,
         }}
       >
         {eventConfig.groomName} & {eventConfig.brideName}
       </h2>
 
       <p
-        className="final-text"
+        className="ff-text"
         style={{
           fontFamily: "'Manrope', sans-serif",
-          fontSize: '0.75rem',
+          fontSize: '0.7rem',
           fontWeight: 400,
           letterSpacing: '0.2em',
-          color: '#9A9185',
-          marginTop: '1em',
+          color: '#8A8279',
+          marginTop: '0.8em',
           opacity: 0,
+          position: 'relative',
+          zIndex: 2,
         }}
       >
         14 — 11 — 2026
       </p>
 
       <div
-        className="final-line"
+        className="ff-line"
         style={{
           width: '1px',
-          height: '60px',
-          background: '#C7A66A',
-          margin: '2.5rem auto',
+          height: '50px',
+          background: 'linear-gradient(180deg, #C9A96E, rgba(201, 169, 110, 0.1))',
+          margin: '2rem auto',
           transformOrigin: 'top center',
+          transform: 'scaleY(0)',
+          position: 'relative',
+          zIndex: 2,
         }}
       />
 
       <p
-        className="final-text"
+        className="ff-text"
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
           fontWeight: 300,
           fontSize: '0.9rem',
-          color: '#9A9185',
+          color: '#8A8279',
           opacity: 0,
+          position: 'relative',
+          zIndex: 2,
         }}
       >
         See you there.

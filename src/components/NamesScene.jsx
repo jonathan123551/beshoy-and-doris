@@ -13,18 +13,20 @@ export default function NamesScene() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const groom = sectionRef.current.querySelector('.names-groom');
-      const bride = sectionRef.current.querySelector('.names-bride');
-      const twoStories = sectionRef.current.querySelector('.names-two');
-      const onePromise = sectionRef.current.querySelector('.names-one');
-      const panelL = sectionRef.current.querySelector('.names-panel-l');
-      const panelR = sectionRef.current.querySelector('.names-panel-r');
+      const groom = sectionRef.current.querySelector('.ns-groom');
+      const bride = sectionRef.current.querySelector('.ns-bride');
+      const ampersand = sectionRef.current.querySelector('.ns-amp');
+      const twoStories = sectionRef.current.querySelector('.ns-two');
+      const onePromise = sectionRef.current.querySelector('.ns-one');
+      const inner = sectionRef.current.querySelector('.ns-inner');
+      const glowL = sectionRef.current.querySelector('.ns-glow-l');
+      const glowR = sectionRef.current.querySelector('.ns-glow-r');
 
       const mm = gsap.matchMedia();
 
       mm.add({
-        isMobile: "(max-width: 768px)",
-        isDesktop: "(min-width: 769px)"
+        isMobile: '(max-width: 768px)',
+        isDesktop: '(min-width: 769px)',
       }, (context) => {
         const { isMobile } = context.conditions;
 
@@ -34,28 +36,64 @@ export default function NamesScene() {
             start: 'top top',
             end: 'bottom top',
             scrub: 1,
-            pin: sectionRef.current.querySelector('.names-inner'),
+            pin: inner,
           },
         });
 
-        // Names slide in
-        const xStart = isMobile ? '30vw' : '100vw';
-        tl.fromTo(groom, { x: `-${xStart}`, opacity: isMobile ? 0 : 1 }, { x: '0vw', opacity: 1, ease: 'none' }, 0);
-        tl.fromTo(bride, { x: xStart, opacity: isMobile ? 0 : 1 }, { x: '0vw', opacity: 1, ease: 'none' }, 0);
+        // Names converge — closer start on mobile
+        const xDist = isMobile ? '25vw' : '80vw';
 
-        // Reveal text faster on mobile
-        const textStart = isMobile ? 0.2 : 0.35;
-        tl.fromTo(twoStories, { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, textStart);
-        tl.fromTo(onePromise, { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, textStart + 0.15);
+        tl.fromTo(groom,
+          { x: `-${xDist}`, opacity: 0, filter: 'blur(6px)' },
+          { x: '0', opacity: 1, filter: 'blur(0px)', ease: 'none' },
+          0
+        );
+        tl.fromTo(bride,
+          { x: xDist, opacity: 0, filter: 'blur(6px)' },
+          { x: '0', opacity: 1, filter: 'blur(0px)', ease: 'none' },
+          0
+        );
 
-        // Curtain open
-        const curtainStart = isMobile ? 0.6 : 0.7;
-        tl.to(panelL, { x: '-100%', ease: 'power2.inOut' }, curtainStart);
-        tl.to(panelR, { x: '100%', ease: 'power2.inOut' }, curtainStart);
+        // Ampersand fades in
+        tl.fromTo(ampersand,
+          { opacity: 0, scale: 0.7 },
+          { opacity: 1, scale: 1, ease: 'power2.out' },
+          isMobile ? 0.15 : 0.25
+        );
 
-        // Fade out
-        tl.to([groom, bride, twoStories, onePromise], { opacity: 0 }, curtainStart + 0.05);
+        // Warm glows breathe in as names converge
+        tl.fromTo(glowL,
+          { opacity: 0 },
+          { opacity: 1 },
+          0.1
+        );
+        tl.fromTo(glowR,
+          { opacity: 0 },
+          { opacity: 1 },
+          0.15
+        );
+
+        // Text reveals
+        tl.fromTo(twoStories,
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0 },
+          isMobile ? 0.3 : 0.4
+        );
+        tl.fromTo(onePromise,
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0 },
+          isMobile ? 0.4 : 0.5
+        );
+
+        // Everything fades at end to transition
+        tl.to([groom, bride, ampersand, twoStories, onePromise, glowL, glowR], {
+          opacity: 0,
+          y: -15,
+          filter: 'blur(2px)',
+          stagger: 0.02,
+        }, isMobile ? 0.7 : 0.75);
       });
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -64,21 +102,12 @@ export default function NamesScene() {
   const nameStyle = {
     fontFamily: "'Cormorant Garamond', serif",
     fontWeight: 300,
-    fontSize: 'clamp(3.5rem, 15vw, 8rem)', // slightly larger on mobile
-    color: '#F4EFE6',
+    fontSize: 'clamp(3.5rem, 16vw, 9rem)',
+    color: '#F2ECE2',
     textTransform: 'uppercase',
-    letterSpacing: '0.1em',
+    letterSpacing: '0.08em',
     lineHeight: 1,
     whiteSpace: 'nowrap',
-  };
-
-  const subtextStyle = {
-    fontFamily: "'Cormorant Garamond', serif",
-    fontStyle: 'italic',
-    fontWeight: 300,
-    fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
-    color: '#9A9185',
-    letterSpacing: '0.05em',
     opacity: 0,
   };
 
@@ -87,23 +116,15 @@ export default function NamesScene() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: 'var(--names-height, 300vh)',
-        background: '#0B0A09',
+        height: '150svh',
+        background: '#0A0908',
       }}
     >
-      <style>{`
-        @media (max-width: 768px) {
-          section {
-            --names-height: 160svh;
-          }
-        }
-      `}</style>
       <div
-        className="names-inner"
+        className="ns-inner"
         style={{
           position: 'relative',
           width: '100%',
-          height: '100vh',
           height: '100dvh',
           display: 'flex',
           flexDirection: 'column',
@@ -112,33 +133,82 @@ export default function NamesScene() {
           overflow: 'hidden',
         }}
       >
-        <div className="names-groom" style={{ ...nameStyle, textAlign: 'center' }}>
+        {/* Warm depth glows */}
+        <div className="ns-glow-l" style={{
+          position: 'absolute',
+          top: '20%',
+          left: '-10%',
+          width: '50vw',
+          height: '50vw',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(201, 169, 110, 0.05) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          opacity: 0,
+          filter: 'blur(30px)',
+        }} />
+        <div className="ns-glow-r" style={{
+          position: 'absolute',
+          bottom: '20%',
+          right: '-10%',
+          width: '50vw',
+          height: '50vw',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          opacity: 0,
+          filter: 'blur(30px)',
+        }} />
+
+        {/* Names + ampersand */}
+        <div className="ns-groom" style={{ ...nameStyle, textAlign: 'center' }}>
           {eventConfig.groomName}
         </div>
 
         <div
+          className="ns-amp"
           style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-            color: '#C7A66A',
-            margin: '0.1em 0',
+            fontSize: 'clamp(1.8rem, 6vw, 3rem)',
+            color: '#C9A96E',
+            margin: '0.15em 0',
             fontWeight: 300,
+            fontStyle: 'italic',
+            opacity: 0,
           }}
         >
           &amp;
         </div>
 
-        <div className="names-bride" style={{ ...nameStyle, textAlign: 'center' }}>
+        <div className="ns-bride" style={{ ...nameStyle, textAlign: 'center' }}>
           {eventConfig.brideName}
         </div>
 
-        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-          <p className="names-two" style={subtextStyle}>Two stories.</p>
-          <p className="names-one" style={{ ...subtextStyle, marginTop: '0.5em' }}>One promise.</p>
+        {/* Subtext */}
+        <div style={{ marginTop: '2.5rem', textAlign: 'center', position: 'relative', zIndex: 2 }}>
+          <p className="ns-two" style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            fontWeight: 300,
+            fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
+            color: '#8A8279',
+            letterSpacing: '0.05em',
+            opacity: 0,
+          }}>
+            Two stories.
+          </p>
+          <p className="ns-one" style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            fontWeight: 300,
+            fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
+            color: '#8A8279',
+            letterSpacing: '0.05em',
+            marginTop: '0.5em',
+            opacity: 0,
+          }}>
+            One promise.
+          </p>
         </div>
-
-        <div className="names-panel-l" style={{ position: 'absolute', top: 0, left: 0, width: '50%', height: '100%', background: '#0B0A09', zIndex: 5, pointerEvents: 'none' }} />
-        <div className="names-panel-r" style={{ position: 'absolute', top: 0, right: 0, width: '50%', height: '100%', background: '#0B0A09', zIndex: 5, pointerEvents: 'none' }} />
       </div>
     </section>
   );

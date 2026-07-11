@@ -12,18 +12,18 @@ export default function DateSequence() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const num14 = sectionRef.current.querySelector('.date-14');
-      const num11 = sectionRef.current.querySelector('.date-11');
-      const num2026 = sectionRef.current.querySelector('.date-2026');
-      const assembled = sectionRef.current.querySelector('.date-assembled');
-      const details = sectionRef.current.querySelector('.date-details');
-      const inner = sectionRef.current.querySelector('.date-inner');
+      const num14 = sectionRef.current.querySelector('.ds-14');
+      const num11 = sectionRef.current.querySelector('.ds-11');
+      const num2026 = sectionRef.current.querySelector('.ds-2026');
+      const assembled = sectionRef.current.querySelector('.ds-assembled');
+      const details = sectionRef.current.querySelector('.ds-details');
+      const inner = sectionRef.current.querySelector('.ds-inner');
 
       const mm = gsap.matchMedia();
 
       mm.add({
-        isMobile: "(max-width: 768px)",
-        isDesktop: "(min-width: 769px)"
+        isMobile: '(max-width: 768px)',
+        isDesktop: '(min-width: 769px)',
       }, (context) => {
         const { isMobile } = context.conditions;
 
@@ -37,31 +37,48 @@ export default function DateSequence() {
           },
         });
 
-        // Fast pacing for mobile beats
-        const b1 = 0;
-        const b2 = isMobile ? 0.2 : 0.25;
-        const b3 = isMobile ? 0.4 : 0.45;
-        const b4 = isMobile ? 0.6 : 0.65;
-        const b5 = isMobile ? 0.8 : 0.85;
+        // Tighter beats on mobile
+        const b = isMobile
+          ? [0, 0.18, 0.36, 0.54, 0.75]
+          : [0, 0.2, 0.4, 0.6, 0.8];
 
-        // Phase 1: 14 enters
-        tl.fromTo(num14, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, ease: 'power2.out' }, b1);
-        
-        // Phase 2: 11 enters, 14 fades up
-        tl.to(num14, { y: '-50%', opacity: 0, scale: 0.9 }, b2);
-        tl.fromTo(num11, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, ease: 'power2.out' }, b2);
+        // 14 enters
+        tl.fromTo(num14,
+          { y: '80%', opacity: 0, filter: 'blur(8px)' },
+          { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          b[0]
+        );
 
-        // Phase 3: 2026 enters, 11 fades up
-        tl.to(num11, { y: '-50%', opacity: 0, scale: 0.9 }, b3);
-        tl.fromTo(num2026, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, ease: 'power2.out' }, b3);
+        // 14 exits, 11 enters
+        tl.to(num14, { y: '-40%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[1]);
+        tl.fromTo(num11,
+          { y: '80%', opacity: 0, filter: 'blur(8px)' },
+          { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          b[1]
+        );
 
-        // Phase 4: 2026 fades up, assembled date enters
-        tl.to(num2026, { y: '-50%', opacity: 0, scale: 0.9 }, b4);
-        tl.fromTo(assembled, { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power2.out' }, b4);
+        // 11 exits, 2026 enters
+        tl.to(num11, { y: '-40%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[2]);
+        tl.fromTo(num2026,
+          { y: '80%', opacity: 0, filter: 'blur(8px)' },
+          { y: '0%', opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          b[2]
+        );
 
-        // Phase 5: Reveal details
-        tl.fromTo(details, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, b5);
-        
+        // 2026 exits, assembled date appears
+        tl.to(num2026, { y: '-40%', opacity: 0, scale: 0.9, filter: 'blur(4px)' }, b[3]);
+        tl.fromTo(assembled,
+          { scale: 1.3, opacity: 0, filter: 'blur(6px)' },
+          { scale: 1, opacity: 1, filter: 'blur(0px)', ease: 'power2.out' },
+          b[3]
+        );
+
+        // Details reveal
+        tl.fromTo(details,
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0 },
+          b[4]
+        );
       });
     }, sectionRef);
 
@@ -72,8 +89,8 @@ export default function DateSequence() {
     position: 'absolute',
     fontFamily: "'Cormorant Garamond', serif",
     fontWeight: 300,
-    fontSize: 'clamp(8rem, 30vw, 20rem)',
-    color: '#F4EFE6',
+    fontSize: 'clamp(7rem, 28vw, 18rem)',
+    color: '#F2ECE2',
     lineHeight: 1,
     opacity: 0,
     pointerEvents: 'none',
@@ -84,23 +101,15 @@ export default function DateSequence() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: 'var(--date-height, 400vh)',
-        background: '#0B0A09',
+        height: '180svh',
+        background: '#0A0908',
       }}
     >
-      <style>{`
-        @media (max-width: 768px) {
-          section {
-            --date-height: 200svh;
-          }
-        }
-      `}</style>
       <div
-        className="date-inner"
+        className="ds-inner"
         style={{
           position: 'relative',
           width: '100%',
-          height: '100vh',
           height: '100dvh',
           display: 'flex',
           flexDirection: 'column',
@@ -109,62 +118,63 @@ export default function DateSequence() {
           overflow: 'hidden',
         }}
       >
-        {/* Giant Numbers */}
-        <div className="date-14" style={hugeStyle}>14</div>
-        <div className="date-11" style={hugeStyle}>11</div>
-        <div className="date-2026" style={{ ...hugeStyle, fontSize: 'clamp(5rem, 22vw, 15rem)' }}>2026</div>
+        {/* Warm background glow */}
+        <div style={{
+          position: 'absolute',
+          width: '70vw',
+          height: '70vw',
+          maxWidth: '400px',
+          maxHeight: '400px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
 
-        {/* Assembled Date */}
-        <div
-          className="date-assembled"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.2em',
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(2rem, 8vw, 4rem)',
-            letterSpacing: '0.1em',
-            color: '#F4EFE6',
-            opacity: 0,
-            pointerEvents: 'none',
-          }}
-        >
+        <div className="ds-14" style={hugeStyle}>14</div>
+        <div className="ds-11" style={hugeStyle}>11</div>
+        <div className="ds-2026" style={{ ...hugeStyle, fontSize: 'clamp(5rem, 20vw, 14rem)' }}>2026</div>
+
+        {/* Assembled */}
+        <div className="ds-assembled" style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.15em',
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 'clamp(2.2rem, 9vw, 4.5rem)',
+          letterSpacing: '0.08em',
+          color: '#F2ECE2',
+          fontWeight: 300,
+          opacity: 0,
+        }}>
           <span>14</span>
-          <span style={{ color: '#C7A66A' }}>.</span>
+          <span style={{ color: '#C9A96E', fontSize: '0.7em' }}>.</span>
           <span>11</span>
-          <span style={{ color: '#C7A66A' }}>.</span>
+          <span style={{ color: '#C9A96E', fontSize: '0.7em' }}>.</span>
           <span>2026</span>
         </div>
 
         {/* Details */}
-        <div
-          className="date-details"
-          style={{
-            marginTop: '2rem',
-            textAlign: 'center',
-            opacity: 0,
-            pointerEvents: 'none',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: "'Manrope', sans-serif",
-              fontSize: '0.75rem',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#9A9185',
-              marginBottom: '0.5em',
-            }}
-          >
+        <div className="ds-details" style={{
+          marginTop: '1.5rem',
+          textAlign: 'center',
+          opacity: 0,
+        }}>
+          <p style={{
+            fontFamily: "'Manrope', sans-serif",
+            fontSize: '0.65rem',
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            color: '#8A8279',
+            marginBottom: '0.4em',
+          }}>
             Saturday
           </p>
-          <p
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: '1.5rem',
-              color: '#F4EFE6',
-            }}
-          >
+          <p style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: '1.3rem',
+            fontWeight: 300,
+            color: '#F2ECE2',
+          }}>
             5:00 PM
           </p>
         </div>

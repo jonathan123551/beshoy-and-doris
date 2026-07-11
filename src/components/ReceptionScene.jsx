@@ -13,34 +13,34 @@ export default function ReceptionScene() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const textEls = sectionRef.current.querySelectorAll('.reception-text');
-      const orbs = sectionRef.current.querySelectorAll('.light-orb');
+      const textEls = sectionRef.current.querySelectorAll('.rec-text');
+      const orbs = sectionRef.current.querySelectorAll('.rec-orb');
 
-      // Floating ambient lights
+      // Floating ambient lights — slow breathing
       orbs.forEach((orb, i) => {
         gsap.to(orb, {
-          x: i % 2 === 0 ? '30%' : '-30%',
-          y: i % 2 === 0 ? '20%' : '-20%',
-          duration: 12 + i * 2,
+          x: `${(i % 2 === 0 ? 1 : -1) * 25}%`,
+          y: `${(i % 2 === 0 ? -1 : 1) * 15}%`,
+          duration: 10 + i * 3,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
         });
       });
 
-      // Text stagger in on scroll
-      gsap.fromTo(
-        textEls,
-        { opacity: 0, y: 30 },
+      // Staggered entry on scroll
+      gsap.fromTo(textEls,
+        { opacity: 0, y: 25, filter: 'blur(3px)' },
         {
           opacity: 1,
           y: 0,
-          stagger: 0.15,
-          duration: 0.8,
+          filter: 'blur(0px)',
+          stagger: 0.12,
+          duration: 0.9,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 85%',
+            start: 'top 80%',
             toggleActions: 'play none none none',
           },
         }
@@ -55,147 +55,111 @@ export default function ReceptionScene() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '100vh',
         minHeight: '100dvh',
-        background: '#0B0A09', // Warmer feel visually created by the orbs below
+        background: '#0A0908',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '10vh 1.5rem',
+        padding: '8vh 1.5rem',
         overflow: 'hidden',
       }}
     >
-      {/* Warm Ambient Lights */}
-      <div
-        className="light-orb"
-        style={{
-          position: 'absolute',
-          top: '20%',
-          left: '10%',
-          width: '50vw',
-          height: '50vw',
-          background: 'radial-gradient(circle, rgba(199, 166, 106, 0.12) 0%, transparent 70%)',
-          filter: 'blur(40px)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        className="light-orb"
-        style={{
-          position: 'absolute',
-          bottom: '10%',
-          right: '10%',
-          width: '60vw',
-          height: '60vw',
-          background: 'radial-gradient(circle, rgba(154, 145, 133, 0.1) 0%, transparent 70%)',
-          filter: 'blur(50px)',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Warm ambient orbs — warmer than ceremony */}
+      <div className="rec-orb" style={{
+        position: 'absolute', top: '15%', left: '5%',
+        width: '55vw', height: '55vw',
+        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.1) 0%, transparent 65%)',
+        filter: 'blur(50px)', pointerEvents: 'none',
+      }} />
+      <div className="rec-orb" style={{
+        position: 'absolute', bottom: '10%', right: '5%',
+        width: '50vw', height: '50vw',
+        background: 'radial-gradient(circle, rgba(166, 158, 148, 0.08) 0%, transparent 65%)',
+        filter: 'blur(40px)', pointerEvents: 'none',
+      }} />
+      <div className="rec-orb" style={{
+        position: 'absolute', top: '50%', left: '40%',
+        width: '30vw', height: '30vw',
+        background: 'radial-gradient(circle, rgba(212, 184, 122, 0.06) 0%, transparent 70%)',
+        filter: 'blur(35px)', pointerEvents: 'none',
+      }} />
 
-      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', width: '100%' }}>
-        <div className="reception-text" style={{ marginBottom: '1.5rem' }}>
-          <span
-            style={{
-              fontFamily: "'Manrope', sans-serif",
-              fontSize: '0.65rem',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#9A9185',
-            }}
-          >
+      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', width: '100%', maxWidth: '500px' }}>
+        <div className="rec-text" style={{ marginBottom: '1.5rem' }}>
+          <span style={{
+            fontFamily: "'Manrope', sans-serif",
+            fontSize: '0.6rem',
+            letterSpacing: '0.35em',
+            textTransform: 'uppercase',
+            color: '#8A8279',
+          }}>
             The Reception
           </span>
         </div>
 
-        <div className="reception-text" style={{ marginBottom: '1.5rem' }}>
-          <h2
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontStyle: 'italic',
-              fontWeight: 300,
-              fontSize: 'clamp(2rem, 8vw, 4rem)',
-              color: '#F4EFE6',
-              lineHeight: 1.1,
-            }}
-          >
+        <div className="rec-text" style={{ marginBottom: '1.2rem' }}>
+          <h2 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            fontWeight: 400,
+            fontSize: 'clamp(2.2rem, 9vw, 4.5rem)',
+            color: '#F2ECE2',
+            lineHeight: 1.05,
+          }}>
             {eventConfig.reception.name}
           </h2>
-          <p
-            style={{
-              fontFamily: "'Manrope', sans-serif",
-              fontSize: '0.75rem',
-              color: '#9A9185',
-              marginTop: '0.5em',
-            }}
-          >
+          <p style={{
+            fontFamily: "'Manrope', sans-serif",
+            fontSize: '0.7rem',
+            color: '#8A8279',
+            marginTop: '0.5em',
+            letterSpacing: '0.1em',
+          }}>
             {eventConfig.reception.area}
           </p>
         </div>
 
-        <div className="reception-text" style={{ marginBottom: '3rem' }}>
-          <p
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontStyle: 'italic',
-              fontWeight: 300,
-              fontSize: '1.2rem',
-              color: '#C7A66A',
-            }}
-          >
+        <div className="rec-text" style={{ marginBottom: '2.5rem' }}>
+          <p style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            fontWeight: 300,
+            fontSize: 'clamp(1rem, 3vw, 1.3rem)',
+            color: '#C9A96E',
+          }}>
             Dinner. Music. Memories.
           </p>
         </div>
 
-        <div className="reception-text">
+        <div className="rec-text">
           <a
             href={eventConfig.reception.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textDecoration: 'none',
-              minHeight: '44px',
-              padding: '0.8rem 2rem',
-              border: '1px solid rgba(199, 166, 106, 0.3)',
-              background: 'rgba(11, 10, 9, 0.5)',
-              backdropFilter: 'blur(5px)',
-              borderRadius: '2px',
-              transition: 'border-color 0.3s, background 0.3s',
-            }}
+            className="cta-link"
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span
-                style={{
-                  fontFamily: "'Manrope', sans-serif",
-                  fontSize: '0.65rem',
-                  fontWeight: 400,
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: '#C7A66A',
-                }}
-              >
+              <span style={{
+                fontFamily: "'Manrope', sans-serif",
+                fontSize: '0.6rem',
+                fontWeight: 400,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: '#C9A96E',
+              }}>
                 Open Reception Location
               </span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7A66A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
               </svg>
             </div>
-            <span
-              dir="rtl"
-              lang="ar"
-              style={{
-                fontFamily: "'Amiri', sans-serif",
-                fontSize: '0.8rem',
-                color: '#9A9185',
-                marginTop: '0.3em',
-              }}
-            >
+            <span dir="rtl" lang="ar" style={{
+              fontFamily: "'Amiri', serif",
+              fontSize: '0.75rem',
+              color: '#8A8279',
+              marginTop: '0.25em',
+            }}>
               الموقع على الخريطة
             </span>
           </a>

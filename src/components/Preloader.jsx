@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
+import { eventConfig } from '../config/eventConfig';
 
 export default function Preloader({ onComplete }) {
   const containerRef = useRef(null);
@@ -8,30 +9,68 @@ export default function Preloader({ onComplete }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
       const obj = { val: 0 };
-      gsap.to(obj, {
+
+      // Progress animation
+      tl.to(obj, {
         val: 100,
-        duration: 2.5,
+        duration: 2.2,
         ease: 'power2.inOut',
         onUpdate: () => {
-          setProgress(Math.round(obj.val));
+          const v = Math.round(obj.val);
+          setProgress(v);
           if (lineRef.current) {
-            lineRef.current.style.width = obj.val + '%';
+            lineRef.current.style.width = v + '%';
           }
         },
-        onComplete: () => {
-          gsap.to(containerRef.current, {
-            opacity: 0,
-            y: -30,
-            duration: 0.8,
-            ease: 'power3.inOut',
-            delay: 0.4,
-            onComplete: () => {
-              if (onComplete) onComplete();
-            },
-          });
-        },
       });
+
+      // Exit sequence
+      tl.to('.preloader-number', {
+        opacity: 0,
+        y: -10,
+        duration: 0.4,
+        ease: 'power2.in',
+      }, '+=0.2');
+
+      tl.to('.preloader-line-track', {
+        opacity: 0,
+        scaleX: 1.5,
+        duration: 0.5,
+        ease: 'power3.in',
+      }, '-=0.2');
+
+      tl.to('.preloader-names', {
+        opacity: 0,
+        y: -15,
+        duration: 0.5,
+        ease: 'power2.in',
+      }, '-=0.3');
+
+      // Flash of warm light
+      tl.to('.preloader-flash', {
+        opacity: 0.15,
+        duration: 0.3,
+        ease: 'power2.in',
+      });
+
+      tl.to('.preloader-flash', {
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+      });
+
+      // Slide entire preloader up
+      tl.to(containerRef.current, {
+        yPercent: -100,
+        duration: 0.9,
+        ease: 'power3.inOut',
+        onComplete: () => {
+          if (onComplete) onComplete();
+        },
+      }, '-=0.4');
+
     }, containerRef);
 
     return () => ctx.revert();
@@ -44,31 +83,65 @@ export default function Preloader({ onComplete }) {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background: '#0B0A09',
+        background: '#0A0908',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '1.5rem',
+        gap: '2rem',
       }}
     >
+      {/* Warm radial glow */}
+      <div style={{
+        position: 'absolute',
+        width: '60vw',
+        height: '60vw',
+        maxWidth: '400px',
+        maxHeight: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(201, 169, 110, 0.06) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Names hint */}
+      <div
+        className="preloader-names"
+        style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontWeight: 300,
+          fontSize: 'clamp(0.85rem, 2.5vw, 1.1rem)',
+          color: 'rgba(201, 169, 110, 0.4)',
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          marginBottom: '1rem',
+        }}
+      >
+        {eventConfig.groomName} & {eventConfig.brideName}
+      </div>
+
+      {/* Progress number */}
       <span
+        className="preloader-number"
         style={{
           fontFamily: "'Manrope', sans-serif",
-          fontSize: '0.8rem',
+          fontSize: '0.7rem',
           fontWeight: 300,
           letterSpacing: '0.3em',
-          color: '#9A9185',
+          color: '#8A8279',
           fontVariantNumeric: 'tabular-nums',
         }}
       >
         {String(progress).padStart(2, '0')}
       </span>
+
+      {/* Progress line */}
       <div
+        className="preloader-line-track"
         style={{
-          width: '120px',
+          width: '100px',
           height: '1px',
-          background: 'rgba(199, 166, 106, 0.15)',
+          background: 'rgba(201, 169, 110, 0.12)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -81,10 +154,22 @@ export default function Preloader({ onComplete }) {
             left: 0,
             height: '100%',
             width: '0%',
-            background: '#C7A66A',
+            background: 'linear-gradient(90deg, rgba(201, 169, 110, 0.3), #C9A96E)',
           }}
         />
       </div>
+
+      {/* Warm flash overlay */}
+      <div
+        className="preloader-flash"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(circle at center, rgba(212, 184, 122, 0.3) 0%, transparent 70%)',
+          opacity: 0,
+          pointerEvents: 'none',
+        }}
+      />
     </div>
   );
 }
