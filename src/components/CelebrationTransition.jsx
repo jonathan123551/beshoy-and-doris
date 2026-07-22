@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -8,65 +8,42 @@ export default function CelebrationTransition() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      const line1 = sectionRef.current.querySelector('.ct-1');
-      const line2 = sectionRef.current.querySelector('.ct-2');
-      const inner = sectionRef.current.querySelector('.ct-inner');
-      const warmFlash = sectionRef.current.querySelector('.ct-flash');
-
-      const mm = gsap.matchMedia();
-
-      mm.add({
-        isMobile: '(max-width: 768px)',
-        isDesktop: '(min-width: 769px)',
-      }, (context) => {
-        const { isMobile } = context.conditions;
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-            pin: inner,
-          },
-        });
-
-        // "And then…" appears immediately
-        tl.fromTo(line1,
-          { opacity: 0, y: 8 },
-          { opacity: 1, y: 0 },
-          0.02
-        );
-
-        // "we celebrate." enters quickly
-        tl.fromTo(line2,
-          { opacity: 0, y: 8 },
-          { opacity: 1, y: 0 },
-          isMobile ? 0.15 : 0.2
-        );
-
-        // "And then…" fades
-        tl.to(line1, { opacity: 0, y: -8 }, isMobile ? 0.3 : 0.35);
-
-        // "we celebrate." scales up massively
-        tl.to(line2, {
-          scale: isMobile ? 25 : 18,
-          color: '#F3ECE3', // Scales into the ivory color to act as a bridge
-          ease: 'power2.in',
-        }, isMobile ? 0.35 : 0.45);
-
-        // Warm flash (Blush/Rose) as text fills viewport
-        tl.fromTo(warmFlash,
-          { opacity: 0 },
-          { opacity: 0.15, ease: 'power2.in' },
-          0.7
-        );
-        tl.to(warmFlash, { opacity: 0 }, 0.9);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+          pin: '.ct-inner',
+        },
       });
+
+      tl.to('.ct-wash', { autoAlpha: 1, scale: 1, ease: 'none' }, 0);
+      tl.to('.ct-bloom', { autoAlpha: 1, scale: 1, ease: 'none' }, 0.12);
+      tl.to('.ct-ribbon', { autoAlpha: 1, yPercent: 0, ease: 'none' }, 0.18);
+      tl.to(
+        '.ct-copy',
+        { autoAlpha: 0, yPercent: -18, ease: 'none' },
+        0.5
+      );
+      tl.to(
+        '.ct-bloom',
+        { scale: 1.26, autoAlpha: 0.78, ease: 'none' },
+        0.42
+      );
+      tl.to(
+        '.ct-ribbon',
+        { scaleX: 1.18, autoAlpha: 0.18, ease: 'none' },
+        0.52
+      );
+      tl.to(
+        '.ct-glow',
+        { autoAlpha: 1, ease: 'none' },
+        0.62
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -77,8 +54,7 @@ export default function CelebrationTransition() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '110svh', // Highly compressed pacing
-        background: 'transparent',
+        minHeight: '108svh',
         overflow: 'hidden',
       }}
     >
@@ -86,50 +62,103 @@ export default function CelebrationTransition() {
         className="ct-inner"
         style={{
           position: 'relative',
-          width: '100%',
-          height: '100dvh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
+          minHeight: '100dvh',
+          display: 'grid',
+          placeItems: 'center',
           overflow: 'hidden',
-          background: '#F7F1EA',
+          background:
+            'linear-gradient(180deg, rgba(247,241,234,0.82) 0%, rgba(246,233,216,0.94) 48%, rgba(244,226,203,0.98) 100%)',
         }}
       >
-        <p className="ct-1" style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontStyle: 'italic',
-          fontWeight: 400,
-          fontSize: '1.2rem',
-          color: '#8F7D78',
-          position: 'absolute',
-          opacity: 0,
-        }}>
-          And then…
-        </p>
+        <div
+          className="ct-wash"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'radial-gradient(circle at 50% 18%, rgba(255, 249, 239, 0.96) 0%, rgba(255, 241, 220, 0.42) 26%, transparent 56%), radial-gradient(circle at 50% 72%, rgba(214, 181, 122, 0.18) 0%, rgba(216, 183, 171, 0.14) 36%, transparent 72%)',
+          }}
+        />
 
-        <p className="ct-2" style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontStyle: 'italic',
-          fontWeight: 400,
-          fontSize: 'clamp(1.4rem, 5vw, 2.2rem)',
-          color: '#8F7D78',
-          margin: 0,
-          whiteSpace: 'nowrap',
-          transformOrigin: 'center center',
-          opacity: 0,
-        }}>
-          we celebrate.
-        </p>
+        <div
+            className="ct-bloom"
+            style={{
+              position: 'absolute',
+              width: 'min(92vw, 520px)',
+              aspectRatio: '1 / 1',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,255,255,0.88) 0%, rgba(255,245,230,0.46) 36%, rgba(219,186,149,0.18) 58%, transparent 76%)',
+              filter: 'blur(8px)',
+              opacity: 0.5,
+              transform: 'scale(0.92)',
+            }}
+          />
 
-        {/* Blush flash overlay */}
-        <div className="ct-flash" style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(circle, rgba(232, 200, 200, 0.4) 0%, transparent 60%)',
-          opacity: 0,
-          pointerEvents: 'none',
-        }} />
+        <div
+            className="ct-ribbon"
+            style={{
+              position: 'absolute',
+              width: 'min(120vw, 700px)',
+              height: 'min(32vw, 200px)',
+            borderRadius: '50%',
+            border: '1px solid rgba(183, 135, 114, 0.16)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7)',
+              transform: 'rotate(-8deg)',
+              opacity: 0.52,
+            }}
+          />
+
+        <div
+          className="ct-copy"
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            display: 'grid',
+            justifyItems: 'center',
+            gap: '0.75rem',
+            textAlign: 'center',
+            width: 'min(82vw, 360px)',
+            padding: '0 1rem',
+            opacity: 0.96,
+          }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '0.62rem',
+              fontWeight: 500,
+              letterSpacing: '0.4em',
+              textTransform: 'uppercase',
+              color: 'var(--color-text-muted)',
+            }}
+          >
+            The day softens
+          </p>
+          <p
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontSize: 'clamp(1.2rem, 5vw, 1.7rem)',
+              lineHeight: 1.34,
+              color: 'var(--color-cocoa)',
+            }}
+          >
+            Sacred stillness turns to golden warmth.
+          </p>
+        </div>
+
+        <div
+          className="ct-glow"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: 0,
+            background:
+              'linear-gradient(180deg, rgba(248,229,205,0.12) 0%, rgba(242,210,171,0.24) 38%, rgba(230,187,140,0.34) 100%)',
+            pointerEvents: 'none',
+          }}
+        />
       </div>
     </section>
   );

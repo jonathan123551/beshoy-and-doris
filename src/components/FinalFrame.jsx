@@ -58,13 +58,13 @@ export default function FinalFrame() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '60vh',
+        minHeight: '54vh',
         background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '8vh 2rem calc(8vh + env(safe-area-inset-bottom, 0px))',
+        padding: '6vh 1.6rem calc(6vh + env(safe-area-inset-bottom, 0px))',
         textAlign: 'center',
         overflow: 'hidden',
       }}
@@ -87,9 +87,10 @@ export default function FinalFrame() {
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
           fontWeight: 400,
-          fontSize: 'clamp(1.6rem, 5vw, 2.8rem)',
+          fontSize: 'clamp(1.7rem, 5.4vw, 2.9rem)',
           color: '#4F3E39', // Dark luxury text
-          lineHeight: 1.2,
+          lineHeight: 1.08,
+          letterSpacing: '0.04em',
           opacity: 0,
           position: 'relative',
           zIndex: 2,
@@ -102,11 +103,11 @@ export default function FinalFrame() {
         className="ff-text"
         style={{
           fontFamily: "'Manrope', sans-serif",
-          fontSize: '0.7rem',
+          fontSize: '0.62rem',
           fontWeight: 600,
-          letterSpacing: '0.2em',
+          letterSpacing: '0.26em',
           color: '#8F7D78',
-          marginTop: '0.8em',
+          marginTop: '1rem',
           opacity: 0,
           position: 'relative',
           zIndex: 2,
@@ -119,9 +120,9 @@ export default function FinalFrame() {
         className="ff-line"
         style={{
           width: '1px',
-          height: '50px',
+          height: '44px',
           background: 'linear-gradient(180deg, #C79A8B, transparent)',
-          margin: '2rem auto',
+          margin: '1.8rem auto',
           transformOrigin: 'top center',
           transform: 'scaleY(0)',
           position: 'relative',
@@ -135,7 +136,7 @@ export default function FinalFrame() {
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle: 'italic',
           fontWeight: 400,
-          fontSize: '0.9rem',
+          fontSize: '0.96rem',
           color: '#8F7D78',
           opacity: 0,
           position: 'relative',

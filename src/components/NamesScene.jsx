@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { eventConfig } from '../config/eventConfig';
@@ -9,58 +9,68 @@ export default function NamesScene() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      const gName = sectionRef.current.querySelector('.ns-groom');
-      const bName = sectionRef.current.querySelector('.ns-bride');
-      const sub1 = sectionRef.current.querySelector('.ns-sub1');
-      const sub2 = sectionRef.current.querySelector('.ns-sub2');
-      const inner = sectionRef.current.querySelector('.ns-inner');
-
-      const mm = gsap.matchMedia();
-
-      mm.add({
-        isMobile: '(max-width: 768px)',
-        isDesktop: '(min-width: 769px)',
-      }, (context) => {
-        const { isMobile } = context.conditions;
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-            pin: inner,
-          },
-        });
-
-        // Fast convergence
-        tl.fromTo(gName,
-          { x: isMobile ? '-40vw' : '-30vw', opacity: 0 },
-          { x: '0vw', opacity: 1, ease: 'power1.out' },
-          0
-        );
-        tl.fromTo(bName,
-          { x: isMobile ? '40vw' : '30vw', opacity: 0 },
-          { x: '0vw', opacity: 1, ease: 'power1.out' },
-          0
-        );
-
-        // Quick text reveals
-        tl.fromTo(sub1,
-          { opacity: 0, y: 10, filter: 'blur(3px)' },
-          { opacity: 1, y: 0, filter: 'blur(0px)', ease: 'power2.out' },
-          0.3
-        );
-        tl.fromTo(sub2,
-          { opacity: 0, y: 10, filter: 'blur(3px)' },
-          { opacity: 1, y: 0, filter: 'blur(0px)', ease: 'power2.out' },
-          0.55
-        );
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+          pin: '.ns-inner',
+        },
       });
+
+      tl.fromTo(
+        '.ns-card',
+        { autoAlpha: 0.28, scale: 0.94, yPercent: 8 },
+        { autoAlpha: 1, scale: 1, yPercent: 0, ease: 'none' },
+        0
+      );
+      tl.fromTo(
+        '.ns-overline, .ns-rule, .ns-subline',
+        { autoAlpha: 0, y: 20 },
+        { autoAlpha: 1, y: 0, stagger: 0.06, ease: 'none' },
+        0.08
+      );
+      tl.fromTo(
+        '.ns-name-a',
+        { xPercent: -24, autoAlpha: 0 },
+        { xPercent: 0, autoAlpha: 1, ease: 'none' },
+        0.12
+      );
+      tl.fromTo(
+        '.ns-name-b',
+        { xPercent: 24, autoAlpha: 0 },
+        { xPercent: 0, autoAlpha: 1, ease: 'none' },
+        0.18
+      );
+      tl.fromTo(
+        '.ns-amp',
+        { scale: 0.7, autoAlpha: 0 },
+        { scale: 1, autoAlpha: 1, ease: 'none' },
+        0.24
+      );
+      tl.to(
+        '.ns-card',
+        {
+          yPercent: -6,
+          scale: 0.97,
+          ease: 'none',
+        },
+        0.62
+      );
+      tl.to(
+        '.ns-card > *',
+        {
+          autoAlpha: 0,
+          yPercent: -10,
+          stagger: 0.03,
+          ease: 'none',
+        },
+        0.68
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -71,90 +81,112 @@ export default function NamesScene() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '130svh', // Highly compressed pacing
-        background: 'transparent',
+        minHeight: '150svh',
       }}
     >
       <div
         className="ns-inner"
         style={{
           position: 'relative',
-          width: '100%',
-          height: '100dvh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
+          minHeight: '100dvh',
+          display: 'grid',
+          placeItems: 'center',
+          padding: '1.5rem',
           overflow: 'hidden',
         }}
       >
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1.5rem',
-          position: 'relative',
-          zIndex: 2,
-        }}>
-          <h2
-            className="ns-groom"
+        <div
+          className="ns-card lux-paper"
+          style={{
+            width: 'min(100%, 780px)',
+            minHeight: 'min(68vh, 620px)',
+            borderRadius: '28px',
+            padding: 'clamp(1.5rem, 5vw, 3rem)',
+            display: 'grid',
+            alignContent: 'center',
+            justifyItems: 'center',
+            gap: '1rem',
+            textAlign: 'center',
+          }}
+        >
+          <p
+            className="ns-overline"
             style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontSize: 'clamp(3.5rem, 15vw, 8.5rem)',
-              color: '#4F3E39', // Dark luxury text
+              fontFamily: 'var(--font-sans)',
+              fontSize: '0.66rem',
+              fontWeight: 500,
+              letterSpacing: '0.44em',
               textTransform: 'uppercase',
-              letterSpacing: '0.12em',
-              lineHeight: 0.9,
-              opacity: 0,
+              color: 'var(--color-text-muted)',
             }}
           >
-            {eventConfig.groomName}
-          </h2>
-
-          <h2
-            className="ns-bride"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontSize: 'clamp(3.5rem, 15vw, 8.5rem)',
-              color: '#4F3E39', // Dark luxury text
-              textTransform: 'uppercase',
-              letterSpacing: '0.12em',
-              lineHeight: 0.9,
-              opacity: 0,
-            }}
-          >
-            {eventConfig.brideName}
-          </h2>
-        </div>
-
-        <div style={{
-          position: 'absolute',
-          bottom: '20%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.5rem',
-          zIndex: 2,
-        }}>
-          <p className="ns-sub1" style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontSize: '1rem',
-            color: '#8F7D78',
-            opacity: 0,
-          }}>
-            Two stories.
+            Together with their families
           </p>
-          <p className="ns-sub2" style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontSize: '1rem',
-            color: '#C79A8B', // Blush accent
-            opacity: 0,
-          }}>
-            One promise.
+
+          <div className="ns-rule lux-rule" />
+
+          <div
+            style={{
+              display: 'grid',
+              gap: '0.35rem',
+              width: '100%',
+            }}
+          >
+            <h2
+              className="ns-name-a"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 600,
+                fontSize: 'clamp(3.2rem, 15vw, 7rem)',
+                lineHeight: 0.9,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-dark)',
+              }}
+            >
+              {eventConfig.groomName}
+            </h2>
+            <div
+              className="ns-amp"
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(1.8rem, 7vw, 2.8rem)',
+                color: 'var(--color-rose-gold)',
+              }}
+            >
+              &
+            </div>
+            <h2
+              className="ns-name-b"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 600,
+                fontSize: 'clamp(3.2rem, 15vw, 7rem)',
+                lineHeight: 0.9,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-dark)',
+              }}
+            >
+              {eventConfig.brideName}
+            </h2>
+          </div>
+
+          <p
+            className="ns-subline"
+            style={{
+              width: 'min(80vw, 420px)',
+              marginTop: '0.35rem',
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontSize: 'clamp(1rem, 3.9vw, 1.25rem)',
+              lineHeight: 1.5,
+              color: 'var(--color-cocoa)',
+              letterSpacing: '0.03em',
+            }}
+          >
+            Two stories, one vow, and a day we would be honored to share with you.
           </p>
         </div>
       </div>

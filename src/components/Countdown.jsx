@@ -69,12 +69,12 @@ export default function Countdown() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '40svh', // Compressed
+        minHeight: '36svh',
         background: 'transparent',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '6vh 1.5rem',
+        padding: '5vh 1.2rem',
         overflow: 'hidden',
       }}
     >
@@ -103,13 +103,28 @@ export default function Countdown() {
         </p>
       ) : (
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 0,
+          display: 'grid',
+          gap: '0.8rem',
+          justifyItems: 'center',
           position: 'relative',
           zIndex: 2,
         }}>
+          <p style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '0.58rem',
+            fontWeight: 500,
+            letterSpacing: '0.34em',
+            textTransform: 'uppercase',
+            color: '#8F7D78',
+          }}>
+            Countdown
+          </p>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 0,
+          }}>
           {units.map((unit, i) => (
             <div key={unit.label} style={{ display: 'flex', alignItems: 'center' }}>
               <div
@@ -123,11 +138,12 @@ export default function Countdown() {
                 <span style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   fontWeight: 300,
-                  fontSize: 'clamp(2.2rem, 7vw, 4.5rem)',
+                  fontSize: 'clamp(2.05rem, 7vw, 4rem)',
                   color: '#4F3E39', // Dark luxury text
                   lineHeight: 1,
                   display: 'block',
                   fontVariantNumeric: 'tabular-nums',
+                  letterSpacing: '0.03em',
                 }}>
                   {String(unit.value).padStart(2, '0')}
                 </span>
@@ -135,11 +151,11 @@ export default function Countdown() {
                   fontFamily: "'Manrope', sans-serif",
                   fontSize: '0.5rem',
                   fontWeight: 500,
-                  letterSpacing: '0.2em',
+                  letterSpacing: '0.18em',
                   textTransform: 'uppercase',
                   color: '#8F7D78',
                   display: 'block',
-                  marginTop: '0.7em',
+                  marginTop: '0.55em',
                 }}>
                   {unit.label}
                 </span>
@@ -147,13 +163,14 @@ export default function Countdown() {
               {i < units.length - 1 && (
                 <div style={{
                   width: '1px',
-                  height: '2.5rem',
+                  height: '2.2rem',
                   background: 'rgba(106, 81, 72, 0.2)',
                   flexShrink: 0,
                 }} />
               )}
             </div>
           ))}
+          </div>
         </div>
       )}
     </section>

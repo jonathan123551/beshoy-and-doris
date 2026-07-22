@@ -39,10 +39,10 @@ export default function App() {
       <main
         style={{
           opacity: envelopeOpened ? 1 : 0,
-          transition: 'opacity 0.8s ease',
+          transition: 'opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
-        <OpeningScene />
+        <OpeningScene isActive={envelopeOpened} />
         <NamesScene />
         <CeremonyScene />
         <ChurchEntrance />

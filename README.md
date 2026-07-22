@@ -1,6 +1,6 @@
-# Beshoy & Doris — Cinematic Wedding Invitation
+# Bishoy & Doris — Cinematic Wedding Invitation
 
-A cinematic, highly interactive, scroll-driven digital wedding invitation for Beshoy & Doris.
+A cinematic, highly interactive, scroll-driven digital wedding invitation for Bishoy & Doris.
 
 ## Event Details
 - **Date:** 14 November 2026

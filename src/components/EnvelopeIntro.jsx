@@ -1,370 +1,540 @@
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { eventConfig } from '../config/eventConfig';
 import { playMusic } from '../utils/audioManager';
+
+const paperNoise =
+  'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 220 220\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.028\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.9\'/%3E%3C/svg%3E")';
 
 export default function EnvelopeIntro({ onOpen }) {
   const containerRef = useRef(null);
   const [opened, setOpened] = useState(false);
 
-  // Float animation for envelope
   useEffect(() => {
-    if (opened) return;
+    document.body.classList.add('lock-scroll');
+    return () => document.body.classList.remove('lock-scroll');
+  }, []);
+
+  useEffect(() => {
+    if (opened) return undefined;
+
     const ctx = gsap.context(() => {
-      // Envelope entrance
       const tl = gsap.timeline();
-      tl.fromTo('.env-wrap',
-        { opacity: 0, scale: 0.92, y: 30 },
-        { opacity: 1, scale: 1, y: 0, duration: 1.4, ease: 'power3.out' }
+
+      tl.fromTo(
+        '.env-stage',
+        { autoAlpha: 0, y: 40, scale: 0.96 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 1.5, ease: 'power3.out' }
       );
-      tl.fromTo('.env-hint',
-        { opacity: 0 },
-        { opacity: 1, duration: 0.8, ease: 'power1.inOut' },
-        '-=0.3'
+      tl.fromTo(
+        '.env-copy > *',
+        { autoAlpha: 0, y: 18 },
+        { autoAlpha: 1, y: 0, stagger: 0.08, duration: 1, ease: 'power2.out' },
+        '-=1'
+      );
+      tl.fromTo(
+        '.env-cue',
+        { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' },
+        '-=0.45'
       );
 
-      // Gentle float
       gsap.to('.env-envelope', {
-        y: -6,
-        duration: 3,
+        yPercent: -2.8,
+        rotateZ: -0.6,
+        duration: 4.6,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
       });
 
-      // Glow pulse
       gsap.to('.env-glow', {
-        opacity: 0.8,
-        scale: 1.05,
-        duration: 2.5,
+        scale: 1.12,
+        opacity: 0.85,
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+
+      gsap.to('.env-dust', {
+        yPercent: -8,
+        xPercent: 4,
+        duration: 7,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
       });
     }, containerRef);
+
     return () => ctx.revert();
   }, [opened]);
 
   const handleOpen = () => {
     if (opened) return;
     setOpened(true);
-    
-    // Call synchronously to satisfy iOS Safari restrictions
     playMusic(true);
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
+        defaults: { ease: 'power2.inOut' },
         onComplete: () => {
           document.body.classList.remove('lock-scroll');
-          if (onOpen) onOpen();
+          onOpen?.();
         },
       });
 
-      // Seal breaks
-      tl.to('.env-seal', {
-        scale: 0,
-        opacity: 0,
-        rotation: 180,
-        duration: 0.5,
-        ease: 'back.in(3)',
-      });
-
-      // Flap opens
-      tl.to('.env-flap', {
-        rotateX: -180,
-        duration: 0.9,
-        ease: 'power2.inOut',
-      }, '-=0.1');
-
-      // Letter slides out slightly, envelope drops
-      tl.to('.env-envelope-body', {
-        y: 150,
-        duration: 1,
-        ease: 'power2.inOut',
-      }, '-=0.3');
-      tl.to('.env-flap', {
-        y: 150,
-        duration: 1,
-        ease: 'power2.inOut',
-      }, '-=1');
-
-      tl.to('.env-letter', {
-        y: -100,
-        scale: 1.1,
-        duration: 1,
-        ease: 'power2.out',
-      }, '-=1');
-
-      // Hint fades
-      tl.to('.env-hint', {
-        opacity: 0,
+      tl.to('.env-cue', {
+        autoAlpha: 0,
+        y: 8,
         duration: 0.3,
-      }, '-=1.2');
-
-      // Brief hold to appreciate the letter
-      tl.to({}, { duration: 0.4 });
-
-      // Camera pushes INTO the letter until it fills the screen
-      // The letter is #FCF8F5, matching the global background
-      tl.to('.env-letter', {
-        scale: 15,
-        y: 100, // Move down so we zoom into the blank paper part
-        opacity: 0, // Crossfade to the actual scene behind it
-        duration: 1.2,
-        ease: 'power3.in',
       });
-
-      // The entire wrapper fades out seamlessly
-      tl.to(containerRef.current, {
-        opacity: 0,
-        duration: 0.4,
-        ease: 'power1.inOut',
-      }, '-=0.4');
-
-      // Hide the container to remove from DOM flow
+      tl.to(
+        '.env-seal',
+        {
+          scale: 0.84,
+          duration: 0.18,
+        },
+        0
+      );
+      tl.to(
+        '.env-seal',
+        {
+          scale: 0,
+          rotate: 140,
+          autoAlpha: 0,
+          duration: 0.55,
+          ease: 'back.in(2.8)',
+        },
+        0.18
+      );
+      tl.to(
+        '.env-flap',
+        {
+          rotateX: -176,
+          y: -6,
+          duration: 1,
+          ease: 'power3.inOut',
+        },
+        0.15
+      );
+      tl.to(
+        '.env-letter',
+        {
+          yPercent: -34,
+          duration: 1,
+          ease: 'power3.out',
+        },
+        0.35
+      );
+      tl.to(
+        '.env-envelope-shell',
+        {
+          y: 170,
+          duration: 1.2,
+          ease: 'power2.inOut',
+        },
+        0.42
+      );
+      tl.to(
+        '.env-letter',
+        {
+          scale: 1.08,
+          duration: 0.95,
+          ease: 'power2.out',
+        },
+        0.72
+      );
+      tl.to(
+        '.env-copy > *',
+        {
+          autoAlpha: 0,
+          y: -10,
+          stagger: 0.03,
+          duration: 0.45,
+        },
+        0.25
+      );
+      tl.to(
+        '.env-aura',
+        {
+          autoAlpha: 0,
+          duration: 0.6,
+        },
+        0.65
+      );
+      tl.to(
+        '.env-letter',
+        {
+          scale: 10.5,
+          yPercent: 10,
+          autoAlpha: 0,
+          duration: 1.35,
+          ease: 'power3.in',
+        },
+        1.1
+      );
+      tl.to(
+        containerRef.current,
+        {
+          autoAlpha: 0,
+          duration: 0.42,
+        },
+        '-=0.4'
+      );
       tl.set(containerRef.current, { display: 'none' });
-
     }, containerRef);
-  };
 
-  // Lock scroll on mount
-  useEffect(() => {
-    document.body.classList.add('lock-scroll');
-    return () => document.body.classList.remove('lock-scroll');
-  }, []);
+    return () => ctx.revert();
+  };
 
   return (
     <div
       ref={containerRef}
+      onClick={handleOpen}
       style={{
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background: `
-          radial-gradient(circle at top, #F7F1EA 0%, transparent 60%),
-          #FCF8F5
-        `,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
+        overflow: 'hidden',
         cursor: opened ? 'default' : 'pointer',
+        background:
+          'radial-gradient(circle at 50% 16%, rgba(255, 248, 238, 0.94) 0%, rgba(255, 248, 238, 0.45) 34%, transparent 66%), linear-gradient(180deg, #fbf6f0 0%, #f3e9dd 58%, #f7f1ea 100%)',
       }}
-      onClick={handleOpen}
     >
-      {/* Warm Glow behind envelope */}
       <div
-        className="env-glow"
+        className="env-aura"
         style={{
           position: 'absolute',
-          width: '80vw',
-          height: '80vw',
-          maxWidth: '400px',
-          maxHeight: '400px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(232, 200, 200, 0.4) 0%, transparent 65%)',
+          inset: 0,
           pointerEvents: 'none',
-          opacity: 0.5,
         }}
-      />
-
-      <div className="env-wrap" style={{ opacity: 0, position: 'relative', zIndex: 2 }}>
-        {/* Envelope */}
+      >
         <div
-          className="env-envelope"
+          className="env-glow lux-glow"
           style={{
-            width: 'min(85vw, 380px)',
-            height: '240px',
-            position: 'relative',
-            perspective: '1200px',
-            filter: 'drop-shadow(0 25px 45px rgba(79, 62, 57, 0.15))',
+            width: '68vw',
+            height: '68vw',
+            maxWidth: 460,
+            maxHeight: 460,
+            left: '50%',
+            top: '16%',
+            transform: 'translateX(-50%)',
+            background:
+              'radial-gradient(circle, rgba(216, 183, 171, 0.24) 0%, rgba(204, 176, 138, 0.16) 34%, transparent 70%)',
+          }}
+        />
+        <div
+          className="env-dust"
+          style={{
+            position: 'absolute',
+            inset: '-10%',
+            opacity: 0.34,
+            backgroundImage: paperNoise,
+            mixBlendMode: 'multiply',
+          }}
+        />
+      </div>
+
+      <div
+        className="env-stage"
+        style={{
+          position: 'relative',
+          width: '100%',
+          minHeight: '100%',
+          display: 'grid',
+          placeItems: 'center',
+          padding: 'max(1.5rem, env(safe-area-inset-top)) 1.25rem max(2rem, env(safe-area-inset-bottom))',
+        }}
+      >
+        <div
+          style={{
+            width: 'min(100%, 470px)',
+            display: 'grid',
+            gap: '1.7rem',
+            justifyItems: 'center',
           }}
         >
-          {/* Envelope body (back pocket) */}
           <div
-            className="env-envelope-body"
+            className="env-copy"
             style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(135deg, #F3ECE3 0%, #F7F1EA 50%, #E8C8C8 100%)',
-              borderRadius: '12px',
-              border: '1px solid rgba(214, 181, 122, 0.3)',
-              overflow: 'hidden',
-              zIndex: 3,
+              textAlign: 'center',
+              display: 'grid',
+              gap: '0.85rem',
+              paddingTop: '1.1rem',
             }}
           >
-            {/* Paper texture overlay */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              opacity: 0.15,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-              mixBlendMode: 'multiply',
-            }} />
-            {/* Fold lines */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: `
-                linear-gradient(32deg, transparent 48.5%, rgba(255,255,255,0.6) 49.5%, transparent 51%),
-                linear-gradient(-32deg, transparent 48.5%, rgba(255,255,255,0.6) 49.5%, transparent 51%)
-              `,
-            }} />
+            <p className="lux-label" style={{ color: 'var(--color-cocoa)' }}>
+              Wedding Invitation
+            </p>
+            <div className="lux-rule" />
+            <p
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(1.05rem, 4vw, 1.22rem)',
+                color: 'var(--color-cocoa)',
+                letterSpacing: '0.06em',
+              }}
+            >
+              A quiet beginning for a beautiful promise
+            </p>
           </div>
 
-          {/* Letter inside */}
           <div
-            className="env-letter"
+            className="env-envelope"
             style={{
-              position: 'absolute',
-              left: '50%',
-              bottom: '15px',
-              transform: 'translateX(-50%)',
-              width: '84%',
-              height: '210px',
-              background: '#FCF8F5', /* Matches global background for seamless transition */
-              borderRadius: '10px',
-              border: '1px solid rgba(199, 154, 139, 0.2)',
-              zIndex: 2,
-              padding: '2rem 1rem',
-              textAlign: 'center',
-              boxShadow: '0 4px 15px rgba(79, 62, 57, 0.05)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transformOrigin: 'bottom center',
+              position: 'relative',
+              width: 'min(88vw, 390px)',
+              height: 'min(60vw, 268px)',
+              perspective: '1600px',
+              transformStyle: 'preserve-3d',
+              filter: 'drop-shadow(0 42px 55px rgba(70, 51, 45, 0.16))',
             }}
           >
-            {/* Paper texture on letter */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              opacity: 0.1,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-              mixBlendMode: 'multiply',
-              borderRadius: '10px',
-            }} />
+            <div
+              className="env-envelope-shell"
+              style={{
+                position: 'absolute',
+                inset: 0,
+              }}
+            >
+              <div
+                className="env-envelope-body lux-paper"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: '20px',
+                  background:
+                    'linear-gradient(145deg, rgba(255,255,255,0.85) 0%, rgba(241,228,213,0.96) 55%, rgba(222,196,175,0.96) 100%)',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background:
+                      'linear-gradient(31deg, transparent 47%, rgba(255,255,255,0.62) 49.6%, transparent 52%), linear-gradient(-31deg, transparent 47%, rgba(255,255,255,0.62) 49.6%, transparent 52%)',
+                    opacity: 0.72,
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 'auto 11% 14% 11%',
+                    height: 1,
+                    background:
+                      'linear-gradient(90deg, transparent 0%, rgba(151, 123, 110, 0.26) 10%, rgba(151, 123, 110, 0.1) 90%, transparent 100%)',
+                  }}
+                />
+              </div>
 
-            <div style={{ position: 'relative', zIndex: 2 }}>
-              <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontStyle: 'italic',
-                fontSize: '0.85rem',
-                color: '#C79A8B',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                marginBottom: '0.8em',
-              }}>
-                You're Invited
-              </p>
-              <h1 style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 'clamp(2rem, 9vw, 3.2rem)',
-                fontWeight: 300,
-                color: '#4F3E39',
-                lineHeight: 0.95,
-              }}>
-                {eventConfig.groomName}
-              </h1>
-              <span style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: '1.2rem',
-                color: '#D6B57A',
-                margin: '0.2em 0',
-                fontStyle: 'italic',
-                display: 'block',
-              }}>
-                &amp;
-              </span>
-              <h1 style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 'clamp(2rem, 9vw, 3.2rem)',
-                fontWeight: 300,
-                color: '#4F3E39',
-                lineHeight: 0.95,
-              }}>
-                {eventConfig.brideName}
-              </h1>
+              <div
+                className="env-letter lux-paper"
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  bottom: 18,
+                  transform: 'translateX(-50%)',
+                  width: '84%',
+                  height: '88%',
+                  borderRadius: '14px',
+                  zIndex: 2,
+                  display: 'grid',
+                  placeItems: 'center',
+                  padding: '1.6rem 1.3rem 1.4rem',
+                  transformOrigin: 'bottom center',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'relative',
+                    zIndex: 1,
+                    width: '100%',
+                    height: '100%',
+                    display: 'grid',
+                    gridTemplateRows: 'auto 1fr auto',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'grid',
+                      gap: '0.55rem',
+                      justifyItems: 'center',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '0.58rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.38em',
+                        color: 'var(--color-text-muted)',
+                      }}
+                    >
+                      You are invited
+                    </span>
+                    <div className="lux-rule" style={{ width: 'min(24vw, 92px)' }} />
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'grid',
+                      gap: '0.2rem',
+                    }}
+                  >
+                    <h1
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontSize: 'clamp(2.1rem, 10vw, 3.4rem)',
+                        fontWeight: 600,
+                        lineHeight: 0.88,
+                        letterSpacing: '0.06em',
+                        color: 'var(--color-text-dark)',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {eventConfig.groomName}
+                    </h1>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontSize: '1.5rem',
+                        fontStyle: 'italic',
+                        color: 'var(--color-rose-gold)',
+                      }}
+                    >
+                      &
+                    </span>
+                    <h1
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontSize: 'clamp(2.1rem, 10vw, 3.4rem)',
+                        fontWeight: 600,
+                        lineHeight: 0.88,
+                        letterSpacing: '0.06em',
+                        color: 'var(--color-text-dark)',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {eventConfig.brideName}
+                    </h1>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'end',
+                      gap: '1rem',
+                      fontFamily: 'var(--font-serif)',
+                      fontStyle: 'italic',
+                      color: 'var(--color-text-muted)',
+                      fontSize: '0.9rem',
+                    }}
+                  >
+                    <span>{eventConfig.displayDay}</span>
+                    <span>{eventConfig.displayDate}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="env-flap lux-paper"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '59%',
+                  borderRadius: '20px 20px 0 0',
+                  clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
+                  transformOrigin: 'top center',
+                  zIndex: 3,
+                  background:
+                    'linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(243,229,216,0.98) 42%, rgba(214,187,164,0.98) 100%)',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background:
+                      'linear-gradient(180deg, rgba(255,255,255,0.42) 0%, transparent 64%), radial-gradient(circle at 50% 100%, rgba(183,135,114,0.16) 0%, transparent 62%)',
+                  }}
+                />
+              </div>
+
+              <div
+                className="env-seal"
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '52.5%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  zIndex: 4,
+                  display: 'grid',
+                  placeItems: 'center',
+                  background:
+                    'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.34), transparent 24%), linear-gradient(135deg, #cfa79c 0%, #b2806f 52%, #8f665b 100%)',
+                  boxShadow:
+                    '0 14px 24px rgba(96, 67, 57, 0.24), inset 0 2px 4px rgba(255,255,255,0.26), inset 0 -8px 16px rgba(114, 73, 58, 0.24)',
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '1rem',
+                    letterSpacing: '0.16em',
+                    color: '#fff8f1',
+                    textShadow: '0 1px 2px rgba(52, 31, 26, 0.26)',
+                  }}
+                >
+                  B D
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Flap */}
           <div
-            className="env-flap"
+            className="env-cue"
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '135px',
-              background: 'linear-gradient(135deg, #F3ECE3 0%, #E8C8C8 100%)',
-              clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
-              transformOrigin: 'top center',
-              zIndex: 4,
-              borderRadius: '12px 12px 0 0',
-              borderTop: '1px solid #FFF',
+              display: 'grid',
+              gap: '0.75rem',
+              justifyItems: 'center',
+              textAlign: 'center',
+              paddingBottom: '0.2rem',
             }}
           >
-            {/* Paper texture on flap */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              opacity: 0.15,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-              mixBlendMode: 'multiply',
-            }} />
-          </div>
-
-          {/* Wax seal */}
-          <div
-            className="env-seal"
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '115px',
-              transform: 'translateX(-50%)',
-              width: '60px',
-              height: '60px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #C79A8B 0%, #A67B6D 50%, #8A6155 100%)',
-              zIndex: 5,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 8px 20px rgba(106, 81, 72, 0.3), inset 0 2px 4px rgba(255,255,255,0.2)',
-            }}
-          >
-            <span style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontStyle: 'italic',
-              fontSize: '1.1rem',
-              color: '#F7F1EA',
-              letterSpacing: '0.05em',
-              fontWeight: 500,
-              textShadow: '0 1px 2px rgba(0,0,0,0.2)',
-            }}>
-              B&D
-            </span>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.64rem',
+                fontWeight: 500,
+                letterSpacing: '0.42em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-muted)',
+              }}
+            >
+              Tap to open with sound
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontSize: '1rem',
+                color: 'var(--color-cocoa)',
+              }}
+            >
+              Let the invitation unfold
+            </p>
           </div>
         </div>
-
-        {/* Tap hint */}
-        <p
-          className="env-hint"
-          style={{
-            marginTop: '3.5rem',
-            fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.65rem',
-            letterSpacing: '0.4em',
-            textTransform: 'uppercase',
-            color: '#8F7D78',
-            textAlign: 'center',
-            opacity: 0,
-          }}
-        >
-          Tap to Open
-        </p>
       </div>
     </div>
   );

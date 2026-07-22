@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { toggleMusic, playMusic, dismissRetry, subscribeToAudio, initAudio } from '../utils/audioManager';
+import {
+  dismissRetry,
+  initAudio,
+  playMusic,
+  subscribeToAudio,
+  toggleMusic,
+} from '../utils/audioManager';
 
 export default function MusicPlayer() {
   const [state, setState] = useState({ isPlaying: false, playFailed: false });
 
   useEffect(() => {
-    // Initialize audio instance (does not play)
     initAudio();
-    // Subscribe to state changes
-    const unsubscribe = subscribeToAudio(newState => {
-      setState(newState);
-    });
-    return unsubscribe;
+    return subscribeToAudio((nextState) => setState(nextState));
   }, []);
 
   const { isPlaying, playFailed } = state;
@@ -21,133 +22,146 @@ export default function MusicPlayer() {
     <>
       <button
         onClick={toggleMusic}
+        aria-label={isPlaying ? 'Pause music' : 'Play music'}
         style={{
           position: 'fixed',
-          bottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))',
-          right: '2rem',
-          zIndex: 50,
-          width: '44px',
-          height: '44px',
+          right: '1.1rem',
+          bottom: 'calc(1.1rem + env(safe-area-inset-bottom, 0px))',
+          zIndex: 70,
+          width: 52,
+          height: 52,
           borderRadius: '50%',
-          background: 'rgba(255, 255, 255, 0.4)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          border: '1px solid rgba(199, 154, 139, 0.3)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 4px 15px rgba(106, 81, 72, 0.08)',
-          transition: 'transform 0.3s ease, border-color 0.3s ease',
-          transform: isPlaying ? 'scale(1)' : 'scale(0.95)',
+          display: 'grid',
+          placeItems: 'center',
+          background:
+            'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(249,241,232,0.72) 100%)',
+          border: '1px solid rgba(183, 135, 114, 0.24)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          boxShadow: '0 12px 28px rgba(78, 59, 52, 0.12)',
+          transition: 'transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease',
+          transform: isPlaying ? 'scale(1)' : 'scale(0.96)',
         }}
-        aria-label={isPlaying ? 'Pause music' : 'Play music'}
       >
-        {/* Animated bars */}
-        <div style={{ display: 'flex', gap: '3px', height: '14px', alignItems: 'flex-end' }}>
-          {[1, 2, 3].map((bar) => (
-            <div
-              key={bar}
+        <div style={{ display: 'flex', gap: 3, alignItems: 'end', height: 16 }}>
+          {[0, 1, 2].map((index) => (
+            <span
+              key={index}
               style={{
-                width: '2px',
-                backgroundColor: '#4F3E39', // Dark luxury text color
-                borderRadius: '2px',
-                height: isPlaying ? '100%' : '3px',
-                transition: 'height 0.3s ease',
-                animation: isPlaying ? `bounce${bar} 1s infinite alternate ease-in-out` : 'none',
-                animationDelay: `${bar * 0.15}s`,
+                width: 3,
+                height: isPlaying ? `${10 + index * 2}px` : '4px',
+                borderRadius: 999,
+                background:
+                  'linear-gradient(180deg, var(--color-brown-warm) 0%, var(--color-rose-gold) 100%)',
+                animation: isPlaying ? `musicBar${index + 1} 0.95s infinite alternate ease-in-out` : 'none',
+                animationDelay: `${index * 0.16}s`,
               }}
             />
           ))}
         </div>
 
         <style>{`
-          @keyframes bounce1 { 0% { height: 4px; } 100% { height: 14px; } }
-          @keyframes bounce2 { 0% { height: 8px; } 100% { height: 12px; } }
-          @keyframes bounce3 { 0% { height: 3px; } 100% { height: 10px; } }
-          
-          @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(20px) translateX(-50%); }
-            to { opacity: 1; transform: translateY(0) translateX(-50%); }
+          @keyframes musicBar1 { from { height: 5px; } to { height: 15px; } }
+          @keyframes musicBar2 { from { height: 8px; } to { height: 13px; } }
+          @keyframes musicBar3 { from { height: 4px; } to { height: 12px; } }
+          @keyframes musicRetryIn {
+            from { opacity: 0; transform: translate(-50%, 18px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
           }
         `}</style>
       </button>
 
-      {/* Playback Failed Retry Interaction */}
-      {playFailed && createPortal(
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 'calc(6rem + env(safe-area-inset-bottom, 0px))',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 9999,
-            background: 'rgba(252, 248, 245, 0.85)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(199, 154, 139, 0.4)',
-            borderRadius: '30px',
-            padding: '0.8rem 1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            boxShadow: '0 15px 35px rgba(79, 62, 57, 0.15)',
-            animation: 'slideUpFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
-          }}
-        >
-          <span style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic',
-            fontSize: '1.1rem',
-            color: '#4F3E39',
-            whiteSpace: 'nowrap',
-          }}>
-            Experience with sound
-          </span>
-          <button
-            onClick={() => playMusic(false)}
+      {playFailed &&
+        createPortal(
+          <div
             style={{
-              fontFamily: "'Manrope', sans-serif",
-              fontSize: '0.65rem',
-              fontWeight: 600,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: '#F7F1EA',
-              background: '#C79A8B',
-              border: 'none',
-              padding: '0.5rem 1.2rem',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              transition: 'background 0.3s ease',
+              position: 'fixed',
+              left: '50%',
+              bottom: 'calc(5.3rem + env(safe-area-inset-bottom, 0px))',
+              transform: 'translateX(-50%)',
+              zIndex: 9999,
+              width: 'min(calc(100vw - 2rem), 360px)',
+              borderRadius: '24px',
+              padding: '1rem 1rem 0.95rem',
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(247,241,234,0.94) 100%)',
+              border: '1px solid rgba(183, 135, 114, 0.22)',
+              boxShadow: '0 18px 42px rgba(63, 48, 44, 0.14)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              animation: 'musicRetryIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards',
             }}
-            onMouseOver={(e) => e.currentTarget.style.background = '#A67B6D'}
-            onMouseOut={(e) => e.currentTarget.style.background = '#C79A8B'}
           >
-            Play Music
-          </button>
-          
-          <button
-            onClick={dismissRetry}
-            style={{
-              background: 'none',
-              border: 'none',
-              padding: '0.5rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#8F7D78',
-            }}
-            aria-label="Dismiss"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>,
-        document.body
-      )}
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.62rem',
+                fontWeight: 500,
+                letterSpacing: '0.34em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-muted)',
+              }}
+            >
+              Sound paused
+            </p>
+            <p
+              style={{
+                marginTop: '0.55rem',
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontSize: '1.05rem',
+                lineHeight: 1.45,
+                color: 'var(--color-cocoa)',
+              }}
+            >
+              The music needs one more tap on this device.
+            </p>
+
+            <div
+              style={{
+                marginTop: '0.95rem',
+                display: 'flex',
+                gap: '0.7rem',
+                alignItems: 'center',
+              }}
+            >
+              <button
+                onClick={() => playMusic(false)}
+                style={{
+                  flex: 1,
+                  minHeight: 42,
+                  borderRadius: '999px',
+                  background: 'var(--color-text-dark)',
+                  color: 'var(--color-paper)',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.64rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.28em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Retry sound
+              </button>
+              <button
+                onClick={dismissRetry}
+                aria-label="Dismiss audio retry"
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: '50%',
+                  border: '1px solid rgba(183, 135, 114, 0.26)',
+                  color: 'var(--color-text-muted)',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
     </>
   );
 }

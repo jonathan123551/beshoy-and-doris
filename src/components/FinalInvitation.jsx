@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { eventConfig } from '../config/eventConfig';
@@ -10,39 +10,44 @@ export default function FinalInvitation() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
       const card = sectionRef.current.querySelector('.fi-card');
-      const els = card.querySelectorAll('.fi-anim');
+      const els = sectionRef.current.querySelectorAll('.fi-anim');
 
-      // The card slides up and tilts slightly into place like a real printed card
-      gsap.fromTo(card,
-        { opacity: 0, y: 50, rotateX: 5, scale: 0.95 },
+      gsap.fromTo(
+        card,
+        { autoAlpha: 0, y: 44, scale: 0.97, rotateX: 4 },
         {
-          opacity: 1, y: 0, rotateX: 0, scale: 1,
-          duration: 1.2,
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          rotateX: 0,
+          duration: 1.15,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top 82%',
             toggleActions: 'play none none none',
           },
         }
       );
 
-      gsap.fromTo(els,
-        { opacity: 0, y: 10 },
+      gsap.fromTo(
+        els,
+        { autoAlpha: 0, y: 12, filter: 'blur(4px)' },
         {
-          opacity: 1, y: 0,
-          stagger: 0.05,
-          duration: 0.8,
+          autoAlpha: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          stagger: 0.045,
+          duration: 0.85,
           ease: 'power2.out',
-          delay: 0.3,
+          delay: 0.18,
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top 82%',
             toggleActions: 'play none none none',
           },
         }
@@ -53,29 +58,36 @@ export default function FinalInvitation() {
   }, []);
 
   const actionStyle = {
-    fontFamily: "'Manrope', sans-serif",
-    fontSize: '0.6rem',
+    fontFamily: 'var(--font-sans)',
+    fontSize: '0.62rem',
     fontWeight: 600,
-    letterSpacing: '0.15em',
+    letterSpacing: '0.22em',
     textTransform: 'uppercase',
-    color: '#C79A8B', // Rose Gold
-    background: 'none',
-    border: 'none',
+    color: 'var(--color-brown-warm)',
+    background: 'rgba(255,255,255,0.34)',
+    border: '1px solid rgba(183, 135, 114, 0.18)',
+    borderRadius: '999px',
     cursor: 'pointer',
-    padding: '0.6em 0',
+    padding: '0.9rem 1.2rem',
     textDecoration: 'none',
-    display: 'inline-block',
-    transition: 'color 0.3s',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     minHeight: '44px',
-    minWidth: '44px',
+    transition: 'border-color 0.3s ease, background 0.3s ease, transform 0.3s ease',
   };
 
-  const dividerStyle = {
-    width: '25px',
-    height: '1px',
-    background: 'rgba(214, 181, 122, 0.4)',
-    margin: '1.3em auto',
-  };
+  const rule = (
+    <div
+      className="fi-anim"
+      style={{
+        width: '42px',
+        height: '1px',
+        margin: '0 auto',
+        background: 'linear-gradient(90deg, transparent, rgba(204,176,138,0.82), transparent)',
+      }}
+    />
+  );
 
   return (
     <section
@@ -83,172 +95,272 @@ export default function FinalInvitation() {
       style={{
         position: 'relative',
         minHeight: '100vh',
-        minHeight: '100dvh',
         background: 'transparent',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '8vh 1.5rem',
+        display: 'grid',
+        placeItems: 'center',
+        padding: 'max(2rem, env(safe-area-inset-top)) 1.2rem max(2rem, env(safe-area-inset-bottom))',
         perspective: '1000px',
         overflow: 'hidden',
       }}
     >
-      {/* Light blush backdrop */}
-      <div style={{
-        position: 'absolute',
-        width: '80vw',
-        height: '80vw',
-        maxWidth: '450px',
-        maxHeight: '450px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(232, 200, 200, 0.4) 0%, transparent 65%)',
-        pointerEvents: 'none',
-      }} />
-
-      {/* Luxury Invitation Card (Already open) */}
       <div
-        className="fi-card"
         style={{
-          background: 'linear-gradient(170deg, #FDFBfa 0%, #F7F1EA 100%)',
-          border: '1px solid rgba(214, 181, 122, 0.3)',
-          maxWidth: '380px',
-          width: '88vw',
-          padding: 'clamp(2rem, 6vw, 3rem) clamp(1.5rem, 5vw, 2.5rem)',
+          position: 'absolute',
+          width: '84vw',
+          height: '84vw',
+          maxWidth: '480px',
+          maxHeight: '480px',
+          borderRadius: '50%',
+          background:
+            'radial-gradient(circle, rgba(232, 200, 200, 0.26) 0%, rgba(214,181,122,0.12) 34%, transparent 70%)',
+          filter: 'blur(10px)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div
+        className="fi-card lux-paper"
+        style={{
+          width: 'min(92vw, 440px)',
+          padding: 'clamp(2rem, 6vw, 3rem) clamp(1.4rem, 5vw, 2.4rem)',
+          borderRadius: '22px',
           textAlign: 'center',
           transformStyle: 'preserve-3d',
-          boxShadow: '0 25px 60px rgba(79, 62, 57, 0.1), 0 0 40px rgba(232, 200, 200, 0.2)',
           position: 'relative',
           zIndex: 2,
-          borderRadius: '4px',
         }}
       >
-        {/* Paper texture overlay inside the card */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          opacity: 0.15,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }} />
+        <div
+          style={{
+            position: 'absolute',
+            inset: '7% 9%',
+            border: '1px solid rgba(204, 176, 138, 0.12)',
+            borderRadius: '16px',
+            pointerEvents: 'none',
+          }}
+        />
 
-        {/* Top ornament */}
-        <div className="fi-anim" style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #D6B57A, transparent)', margin: '0 auto 1.8rem' }} />
-
-        <h3 className="fi-anim" style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontStyle: 'italic',
-          fontWeight: 400,
-          fontSize: 'clamp(1.8rem, 6vw, 2.2rem)',
-          color: '#4F3E39', // Dark luxury text
-          lineHeight: 1.2,
-        }}>
-          {eventConfig.brideName}
-        </h3>
-
-        <span className="fi-anim" style={{
-          display: 'block',
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: '1.1rem',
-          color: '#C79A8B', // Rose gold
-          margin: '0.4em 0',
-          fontStyle: 'italic',
-        }}>
-          &amp;
-        </span>
-
-        <h3 className="fi-anim" style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontStyle: 'italic',
-          fontWeight: 400,
-          fontSize: 'clamp(1.8rem, 6vw, 2.2rem)',
-          color: '#4F3E39',
-          lineHeight: 1.2,
-        }}>
-          {eventConfig.groomName}
-        </h3>
-
-        <div className="fi-anim" style={dividerStyle} />
-
-        <p className="fi-anim" style={{
-          fontFamily: "'Manrope', sans-serif",
-          fontSize: '0.65rem',
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          color: '#8F7D78',
-        }}>
-          14 November 2026
-        </p>
-
-        <p className="fi-anim" style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: '1rem',
-          fontWeight: 500,
-          color: '#6A5148', // Warm brown
-          marginTop: '0.4em',
-        }}>
-          {eventConfig.displayTime}
-        </p>
-
-        <div className="fi-anim" style={dividerStyle} />
-
-        {/* Ceremony */}
-        <div className="fi-anim">
-          <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8F7D78', marginBottom: '0.4em' }}>
-            Ceremony
-          </p>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontWeight: 500, fontSize: '1.05rem', color: '#4F3E39' }}>
-            {eventConfig.church.name}
-          </p>
-          <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#6A5148', marginBottom: '1.2em', marginTop: '0.2em' }}>
-            {eventConfig.church.area}
-          </p>
-        </div>
-
-        {/* Reception */}
-        <div className="fi-anim">
-          <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8F7D78', marginBottom: '0.4em' }}>
-            Reception
-          </p>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontWeight: 500, fontSize: '1.05rem', color: '#4F3E39' }}>
-            {eventConfig.reception.name}
-          </p>
-          <p style={{ fontFamily: "'Manrope', sans-serif", fontSize: '0.7rem', color: '#6A5148', marginTop: '0.2em' }}>
-            {eventConfig.reception.area}
-          </p>
-        </div>
-
-        <div className="fi-anim" style={dividerStyle} />
-
-        {/* Actions */}
-        <div className="fi-anim" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.2em' }}>
-          <a
-            href={eventConfig.church.mapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={actionStyle}
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            display: 'grid',
+            gap: '1rem',
+          }}
+        >
+          <p
+            className="fi-anim"
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '0.62rem',
+              fontWeight: 500,
+              letterSpacing: '0.38em',
+              textTransform: 'uppercase',
+              color: 'var(--color-text-muted)',
+            }}
           >
-            Church ↗
-          </a>
-          <a
-            href={eventConfig.reception.mapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={actionStyle}
-          >
-            Reception ↗
-          </a>
-          <button
-            onClick={() => generateICS(eventConfig)}
-            style={actionStyle}
-          >
-            Calendar +
-          </button>
-        </div>
+            The invitation
+          </p>
 
-        {/* Bottom ornament */}
-        <div className="fi-anim" style={{ width: '35px', height: '1px', background: 'linear-gradient(90deg, transparent, #D6B57A, transparent)', margin: '1.8rem auto 0' }} />
+          {rule}
+
+          <div className="fi-anim" style={{ display: 'grid', gap: '0.18rem' }}>
+            <h3
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 600,
+                fontSize: 'clamp(2.1rem, 8.6vw, 3rem)',
+                lineHeight: 0.92,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-dark)',
+              }}
+            >
+              {eventConfig.brideName}
+            </h3>
+            <span
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontSize: '1.35rem',
+                color: 'var(--color-rose-gold)',
+              }}
+            >
+              &
+            </span>
+            <h3
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 600,
+                fontSize: 'clamp(2.1rem, 8.6vw, 3rem)',
+                lineHeight: 0.92,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-dark)',
+              }}
+            >
+              {eventConfig.groomName}
+            </h3>
+          </div>
+
+          <p
+            className="fi-anim"
+            style={{
+              width: 'min(78vw, 290px)',
+              margin: '0 auto',
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontSize: 'clamp(1.04rem, 4.2vw, 1.25rem)',
+              lineHeight: 1.5,
+              color: 'var(--color-cocoa)',
+            }}
+          >
+            Request the honor of your presence as vows, celebration, and memory become one day.
+          </p>
+
+          {rule}
+
+          <div className="fi-anim" style={{ display: 'grid', gap: '0.28rem' }}>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.58rem',
+                fontWeight: 500,
+                letterSpacing: '0.34em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-muted)',
+              }}
+            >
+              Date & time
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(1.08rem, 4.4vw, 1.35rem)',
+                lineHeight: 1.3,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-dark)',
+              }}
+            >
+              {eventConfig.displayDay}
+              <br />
+              {eventConfig.displayDate}
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontSize: '1.08rem',
+                color: 'var(--color-cocoa)',
+              }}
+            >
+              {eventConfig.displayTime}
+            </p>
+          </div>
+
+          <div
+            className="fi-anim"
+            style={{
+              display: 'grid',
+              gap: '1rem',
+              marginTop: '0.1rem',
+            }}
+          >
+            <div style={{ display: 'grid', gap: '0.22rem' }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.58rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.34em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-text-muted)',
+                }}
+              >
+                Ceremony
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontStyle: 'italic',
+                  fontSize: '1.08rem',
+                  color: 'var(--color-text-dark)',
+                }}
+              >
+                {eventConfig.church.name}
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-cocoa)',
+                }}
+              >
+                {eventConfig.church.area} · {eventConfig.church.city}
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gap: '0.22rem' }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.58rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.34em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-text-muted)',
+                }}
+              >
+                Reception
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontStyle: 'italic',
+                  fontSize: '1.08rem',
+                  color: 'var(--color-text-dark)',
+                }}
+              >
+                {eventConfig.reception.name}
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-cocoa)',
+                }}
+              >
+                {eventConfig.reception.area}
+              </p>
+            </div>
+          </div>
+
+          {rule}
+
+          <div
+            className="fi-anim"
+            style={{
+              display: 'grid',
+              gap: '0.7rem',
+              marginTop: '0.1rem',
+            }}
+          >
+            <a href={eventConfig.church.mapUrl} target="_blank" rel="noopener noreferrer" style={actionStyle}>
+              Ceremony map
+            </a>
+            <a href={eventConfig.reception.mapUrl} target="_blank" rel="noopener noreferrer" style={actionStyle}>
+              Reception map
+            </a>
+            <button onClick={() => generateICS(eventConfig)} style={actionStyle}>
+              Add to calendar
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

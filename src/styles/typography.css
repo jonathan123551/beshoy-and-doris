@@ -1,7 +1,9 @@
-/* Typography System */
-
 .text-serif {
   font-family: var(--font-serif);
+}
+
+.text-display {
+  font-family: var(--font-display);
 }
 
 .text-sans {
@@ -10,36 +12,45 @@
 
 .text-label {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.3em;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--color-stone);
+  color: var(--color-text-muted);
 }
 
 .text-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--color-text-dark);
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+}
+
+.text-title-soft {
   font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 300;
-  color: var(--color-ivory);
+  font-weight: 400;
+  color: var(--color-cocoa);
   line-height: 1.1;
 }
 
 .text-body {
   font-family: var(--font-serif);
+  font-size: 1.1rem;
   font-style: italic;
-  font-weight: 300;
-  color: var(--color-stone);
+  font-weight: 400;
+  color: var(--color-cocoa);
   line-height: 1.6;
 }
 
 .text-cta {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.2em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-champagne);
+  color: var(--color-brown-warm);
   position: relative;
   display: inline-block;
   padding-bottom: 4px;

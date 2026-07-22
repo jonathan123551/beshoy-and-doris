@@ -6,8 +6,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const lines = [
   'We would be honored to have you with us.',
-  'To witness the promise.',
-  'And celebrate the beginning.',
+  'To witness the promise,',
+  'and celebrate the beginning.',
 ];
 
 export default function InvitationMessage() {
@@ -62,13 +62,13 @@ export default function InvitationMessage() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        minHeight: '60vh', // Compressed
+        minHeight: '54vh',
         background: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '8vh 2rem',
+        padding: '6vh 1.6rem',
         overflow: 'hidden',
       }}
     >
@@ -86,10 +86,10 @@ export default function InvitationMessage() {
 
       {/* Decorative divider */}
       <div className="msg-divider" style={{
-        width: '30px',
+        width: '34px',
         height: '1px',
         background: 'rgba(214, 181, 122, 0.6)',
-        marginBottom: '2.5rem',
+        marginBottom: '2rem',
         transformOrigin: 'center',
         transform: 'scaleX(0)',
       }} />
@@ -102,13 +102,14 @@ export default function InvitationMessage() {
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: 'italic',
             fontWeight: 400,
-            fontSize: 'clamp(1.2rem, 4vw, 1.6rem)',
+            fontSize: 'clamp(1.18rem, 4.2vw, 1.52rem)',
             color: '#4F3E39', // Dark luxury text
             textAlign: 'center',
-            lineHeight: 1.7,
-            marginBottom: '1em',
+            lineHeight: 1.5,
+            letterSpacing: '0.02em',
+            marginBottom: '0.72em',
             opacity: 0,
-            maxWidth: '420px',
+            maxWidth: '380px',
             position: 'relative',
             zIndex: 2,
           }}

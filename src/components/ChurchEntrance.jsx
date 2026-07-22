@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -8,53 +8,54 @@ export default function ChurchEntrance() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
-      const door = sectionRef.current.querySelector('.ent-door');
-      const lightOverlay = sectionRef.current.querySelector('.ent-light');
-      const inner = sectionRef.current.querySelector('.ent-inner');
-      const glowInner = sectionRef.current.querySelector('.ent-glow');
-
-      const mm = gsap.matchMedia();
-
-      mm.add({
-        isMobile: '(max-width: 768px)',
-        isDesktop: '(min-width: 769px)',
-      }, (context) => {
-        const { isMobile } = context.conditions;
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-            pin: inner,
-          },
-        });
-
-        // Door scales up dramatically
-        tl.to(door, {
-          width: '250vw',
-          height: '250vh',
-          ease: 'power2.in',
-        }, 0);
-
-        // Warm light intensifies inside
-        tl.to(glowInner, {
-          opacity: 0.9,
-          scale: 2,
-          ease: 'power1.in',
-        }, 0);
-
-        // Fade out everything into a soft blush/light transition
-        tl.to(lightOverlay, {
-          opacity: 1,
-          ease: 'power2.in',
-        }, 0.6);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+          pin: '.ent-inner',
+        },
       });
+
+      tl.to(
+        '.ent-frame',
+        { scale: 1.02, ease: 'none' },
+        0.08
+      );
+      tl.to(
+        '.ent-door',
+        { scale: 1.15, autoAlpha: 1, ease: 'none' },
+        0.08
+      );
+      tl.to(
+        '.ent-aisle',
+        { scaleY: 1, autoAlpha: 0.9, ease: 'none' },
+        0.14
+      );
+      tl.to(
+        '.ent-copy',
+        { autoAlpha: 0, yPercent: -16, ease: 'none' },
+        0.52
+      );
+      tl.to(
+        '.ent-door',
+        { scale: 7.4, autoAlpha: 0.28, ease: 'none' },
+        0.52
+      );
+      tl.to(
+        '.ent-rays',
+        { autoAlpha: 1, scale: 1.18, ease: 'none' },
+        0.55
+      );
+      tl.to(
+        '.ent-overlay',
+        { autoAlpha: 1, ease: 'none' },
+        0.72
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -65,8 +66,7 @@ export default function ChurchEntrance() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '100svh', // Highly compressed
-        background: 'transparent',
+        minHeight: '120svh',
         overflow: 'hidden',
       }}
     >
@@ -74,50 +74,124 @@ export default function ChurchEntrance() {
         className="ent-inner"
         style={{
           position: 'relative',
-          width: '100%',
-          height: '100dvh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'transparent',
+          minHeight: '100dvh',
+          display: 'grid',
+          placeItems: 'center',
+          overflow: 'hidden',
+          padding: '1.4rem',
         }}
       >
-        {/* Door opening - warm light pouring out */}
         <div
-          className="ent-door"
+          className="ent-frame"
           style={{
             position: 'relative',
-            width: '18vw',
-            height: '35vh',
-            background: 'linear-gradient(180deg, rgba(232, 200, 200, 0.2) 0%, rgba(214, 181, 122, 0.1) 100%)',
-            overflow: 'hidden',
-            borderRadius: '50% 50% 0 0 / 30% 30% 0 0',
-            border: '1px solid rgba(199, 154, 139, 0.1)',
-            boxShadow: 'inset 0 10px 30px rgba(214, 181, 122, 0.1)',
+            width: 'min(100%, 760px)',
+            minHeight: '74vh',
+            display: 'grid',
+            placeItems: 'center',
           }}
         >
           <div
-            className="ent-glow"
+            className="ent-rays"
+            style={{
+              position: 'absolute',
+              inset: '-8%',
+              opacity: 0.34,
+              transform: 'scale(1)',
+              background:
+                'radial-gradient(circle at 50% 22%, rgba(255, 248, 235, 0.94) 0%, rgba(255, 241, 223, 0.38) 25%, transparent 62%), linear-gradient(180deg, rgba(255,248,235,0.28) 0%, rgba(255,248,235,0) 36%), linear-gradient(160deg, transparent 0%, rgba(255,255,255,0.44) 46%, transparent 54%), linear-gradient(20deg, transparent 0%, rgba(255,255,255,0.32) 46%, transparent 54%)',
+              filter: 'blur(6px)',
+            }}
+          />
+
+          <div
+            className="ent-door"
+            style={{
+              position: 'relative',
+              width: 'min(34vw, 148px)',
+              height: '48vh',
+              minHeight: 290,
+              maxHeight: 430,
+              borderRadius: '50% 50% 0 0 / 18% 18% 0 0',
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(250,238,224,0.28) 42%, rgba(232,214,190,0.14) 100%)',
+              border: '1px solid rgba(167, 132, 115, 0.12)',
+              boxShadow:
+                'inset 0 0 42px rgba(255,248,235,0.46), 0 18px 38px rgba(96, 71, 58, 0.08)',
+              overflow: 'hidden',
+              opacity: 0.88,
+            }}
+          >
+            <div
+              className="ent-aisle"
+              style={{
+                position: 'absolute',
+                left: '50%',
+                bottom: '-1px',
+                width: '54%',
+                height: '86%',
+                transform: 'translateX(-50%) scaleY(0.58)',
+                transformOrigin: 'bottom center',
+                background:
+                  'linear-gradient(180deg, rgba(255,251,244,0.95) 0%, rgba(255,241,220,0.58) 35%, rgba(233,209,183,0.18) 100%)',
+                clipPath: 'polygon(46% 0, 54% 0, 100% 100%, 0 100%)',
+                opacity: 0.44,
+              }}
+            />
+          </div>
+
+          <div
+            className="ent-copy"
+            style={{
+              position: 'absolute',
+              bottom: '12%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'grid',
+              gap: '0.55rem',
+              justifyItems: 'center',
+              width: 'min(72vw, 280px)',
+              textAlign: 'center',
+              opacity: 0.92,
+            }}
+          >
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.62rem',
+                fontWeight: 500,
+                letterSpacing: '0.36em',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-muted)',
+              }}
+            >
+              The doors open
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontSize: '1rem',
+                lineHeight: 1.45,
+                color: 'var(--color-cocoa)',
+              }}
+            >
+              Morning light gathers, then gently carries the day forward.
+            </p>
+          </div>
+
+          <div
+            className="ent-overlay"
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(ellipse at 50% 60%, rgba(214, 181, 122, 0.4) 0%, transparent 70%)',
-              opacity: 0.3,
+              opacity: 0,
+              background:
+                'radial-gradient(circle at 50% 30%, rgba(255, 248, 235, 0.96) 0%, rgba(250, 236, 217, 0.92) 38%, rgba(245, 224, 199, 0.82) 62%, rgba(243, 220, 196, 0.46) 100%)',
+              pointerEvents: 'none',
             }}
           />
         </div>
-
-        {/* Transition overlay - pure light paper color */}
-        <div
-          className="ent-light"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: '#F7F1EA',
-            opacity: 0,
-            pointerEvents: 'none',
-          }}
-        />
       </div>
     </section>
   );

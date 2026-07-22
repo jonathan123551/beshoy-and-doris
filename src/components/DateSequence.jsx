@@ -101,7 +101,7 @@ export default function DateSequence() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: '130svh', // Highly compressed pacing
+        height: '122svh',
         background: 'transparent',
       }}
     >
@@ -138,10 +138,10 @@ export default function DateSequence() {
         <div className="ds-assembled" style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.15em',
+          gap: '0.12em',
           fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(2.2rem, 9vw, 4.5rem)',
-          letterSpacing: '0.08em',
+          fontSize: 'clamp(2rem, 8.6vw, 4rem)',
+          letterSpacing: '0.06em',
           color: '#4F3E39', // Dark luxury text
           fontWeight: 300,
           opacity: 0,
@@ -155,24 +155,25 @@ export default function DateSequence() {
 
         {/* Details */}
         <div className="ds-details" style={{
-          marginTop: '1.5rem',
+          marginTop: '1.25rem',
           textAlign: 'center',
           opacity: 0,
         }}>
           <p style={{
             fontFamily: "'Manrope', sans-serif",
-            fontSize: '0.65rem',
-            letterSpacing: '0.3em',
+            fontSize: '0.6rem',
+            letterSpacing: '0.34em',
             textTransform: 'uppercase',
             color: '#8F7D78',
-            marginBottom: '0.4em',
+            marginBottom: '0.45em',
           }}>
             Saturday
           </p>
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: '1.3rem',
-            fontWeight: 400,
+            fontStyle: 'italic',
+            fontSize: '1.2rem',
+            fontWeight: 500,
             color: '#6A5148',
           }}>
             5:00 PM

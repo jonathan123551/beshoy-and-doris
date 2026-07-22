@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { eventConfig } from '../config/eventConfig';
@@ -7,10 +7,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 function PhotoImage({ photo, className, style }) {
   const [error, setError] = useState(false);
+
   return (
     <div className={className} style={{ overflow: 'hidden', ...style }}>
       {error ? (
-        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #F3ECE3 0%, #E8C8C8 100%)' }} />
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(135deg, #f3ece3 0%, #e8c8c8 100%)',
+          }}
+        />
       ) : (
         <img
           src={photo.src}
@@ -35,101 +42,74 @@ export default function PhotoStory() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    if (!couplePhotos || couplePhotos.length === 0) return;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
+    if (!couplePhotos || couplePhotos.length === 0) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
     const ctx = gsap.context(() => {
       const inner = sectionRef.current.querySelector('.ps-inner');
       const photos = sectionRef.current.querySelectorAll('.ps-photo');
-      const bgWords = sectionRef.current.querySelectorAll('.ps-bg');
       const caption = sectionRef.current.querySelector('.ps-caption');
+      const veil = sectionRef.current.querySelector('.ps-veil');
 
-      const mm = gsap.matchMedia();
-
-      mm.add({
-        isMobile: '(max-width: 768px)',
-        isDesktop: '(min-width: 769px)',
-      }, (context) => {
-        const { isMobile } = context.conditions;
-
-        if (couplePhotos.length >= 2) {
-          // Dual photo cinematic layout
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-              pin: inner,
-            },
-          });
-
-          // Fast reveal
-          tl.fromTo(photos[0],
-            { x: isMobile ? '-15%' : '-30%', opacity: 0, scale: 1.05, filter: 'blur(4px)' },
-            { x: '0%', opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power2.out' },
-            0
-          );
-
-          tl.fromTo(photos[1],
-            { x: isMobile ? '15%' : '30%', opacity: 0, scale: 1.05, filter: 'blur(4px)' },
-            { x: '0%', opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power2.out' },
-            0.05
-          );
-
-          // Background words drift fast
-          bgWords.forEach((w, i) => {
-            tl.fromTo(w,
-              { x: `${i % 2 === 0 ? 5 : -5}%` },
-              { x: `${i % 2 === 0 ? -5 : 5}%`, ease: 'none' },
-              0
-            );
-          });
-
-          // Subtle depth movement
-          tl.to(photos[0], { y: isMobile ? '-2%' : '-4%' }, 0.2);
-          tl.to(photos[1], { y: isMobile ? '2%' : '4%' }, 0.2);
-
-          // Caption
-          if (caption) {
-            tl.fromTo(caption,
-              { opacity: 0, y: 10 },
-              { opacity: 1, y: 0 },
-              0.4
-            );
-          }
-        } else if (couplePhotos.length === 1) {
-          // Single photo hero
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-              pin: inner,
-            },
-          });
-
-          tl.fromTo(photos[0],
-            { scale: 1.05, filter: 'blur(4px)', opacity: 0 },
-            { scale: 1, filter: 'blur(0px)', opacity: 1, ease: 'power2.out' },
-            0
-          );
-
-          bgWords.forEach((w, i) => {
-            tl.fromTo(w,
-              { x: `${i % 2 === 0 ? 3 : -3}%` },
-              { x: `${i % 2 === 0 ? -3 : 3}%`, ease: 'none' },
-              0
-            );
-          });
-
-          if (caption) {
-            tl.fromTo(caption, { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, 0.3);
-          }
-        }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+          pin: inner,
+        },
       });
+
+      if (photos[0]) {
+        tl.fromTo(
+          photos[0],
+          { autoAlpha: 0.3, scale: 1.06, yPercent: 5, filter: 'blur(6px)' },
+          { autoAlpha: 1, scale: 1, yPercent: 0, filter: 'blur(0px)', ease: 'none' },
+          0
+        );
+        tl.to(
+          photos[0],
+          { yPercent: -3.5, ease: 'none' },
+          0.34
+        );
+      }
+
+      if (photos[1]) {
+        tl.fromTo(
+          photos[1],
+          { autoAlpha: 0, xPercent: -8, yPercent: 8, rotate: -3, filter: 'blur(5px)' },
+          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotate: 0, filter: 'blur(0px)', ease: 'none' },
+          0.12
+        );
+        tl.to(
+          photos[1],
+          { yPercent: 4, ease: 'none' },
+          0.44
+        );
+      }
+
+      if (caption) {
+        tl.fromTo(
+          caption.children,
+          { autoAlpha: 0, y: 16, filter: 'blur(4px)' },
+          { autoAlpha: 1, y: 0, filter: 'blur(0px)', stagger: 0.06, ease: 'none' },
+          0.16
+        );
+        tl.to(
+          caption,
+          { yPercent: -6, ease: 'none' },
+          0.52
+        );
+      }
+
+      if (veil) {
+        tl.to(
+          veil,
+          { autoAlpha: 0.82, ease: 'none' },
+          0.62
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -144,8 +124,7 @@ export default function PhotoStory() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        height: isDual ? '140svh' : '120svh', // Highly compressed pacing
-        background: 'transparent',
+        minHeight: isDual ? '136svh' : '122svh',
       }}
     >
       <div
@@ -154,103 +133,135 @@ export default function PhotoStory() {
           position: 'relative',
           width: '100%',
           height: '100dvh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: 'grid',
+          placeItems: 'center',
           overflow: 'hidden',
-          background: 'transparent',
+          padding: 'max(1.5rem, env(safe-area-inset-top)) 1.2rem max(1.8rem, env(safe-area-inset-bottom))',
         }}
       >
-        {/* Background typography — light blush color */}
-        {[eventConfig.groomName, eventConfig.brideName].map((name, i) => (
-          <span
-            key={name}
-            className="ps-bg"
-            style={{
-              position: 'absolute',
-              top: i === 0 ? '8%' : undefined,
-              bottom: i === 1 ? '8%' : undefined,
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontSize: 'clamp(4rem, 18vw, 13rem)',
-              color: 'rgba(199, 154, 139, 0.08)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.12em',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              userSelect: 'none',
-            }}
-          />
-        ))}
+        <div
+          style={{
+            position: 'absolute',
+            inset: '6% auto auto 50%',
+            width: '86vw',
+            height: '86vw',
+            maxWidth: 540,
+            maxHeight: 540,
+            transform: 'translateX(-50%)',
+            borderRadius: '50%',
+            background:
+              'radial-gradient(circle, rgba(255, 248, 236, 0.72) 0%, rgba(216, 183, 171, 0.14) 34%, transparent 74%)',
+            filter: 'blur(12px)',
+            pointerEvents: 'none',
+          }}
+        />
 
         {isDual ? (
-          /* Dual photo layout — overlapping editorial */
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              display: 'grid',
+              placeItems: 'center',
+            }}
+          >
             <PhotoImage
               photo={couplePhotos[0]}
               className="ps-photo"
               style={{
                 position: 'absolute',
-                width: 'min(75vw, 320px)',
-                height: 'min(55vh, 450px)',
-                left: 'clamp(3%, 5vw, 10%)',
-                top: '12%',
-                zIndex: 3,
-                boxShadow: '0 25px 50px rgba(79, 62, 57, 0.2)',
-                borderRadius: '8px', // Slightly softer corners for light theme
+                width: 'min(82vw, 440px)',
+                height: 'min(72vh, 620px)',
+                right: 'max(4%, 1rem)',
+                top: '8%',
+                zIndex: 2,
+                borderRadius: '18px',
+                boxShadow: '0 32px 70px rgba(79, 62, 57, 0.18)',
               }}
             />
+
             <PhotoImage
               photo={couplePhotos[1]}
               className="ps-photo"
               style={{
                 position: 'absolute',
-                width: 'min(65vw, 280px)',
-                height: 'min(50vh, 420px)',
-                right: 'clamp(3%, 5vw, 10%)',
-                bottom: '12%',
-                zIndex: 2,
-                boxShadow: '0 25px 50px rgba(79, 62, 57, 0.2)',
-                borderRadius: '8px',
+                width: 'min(44vw, 188px)',
+                height: 'min(29vh, 240px)',
+                left: 'max(4%, 0.8rem)',
+                bottom: '15%',
+                zIndex: 3,
+                borderRadius: '14px',
+                boxShadow: '0 22px 44px rgba(79, 62, 57, 0.14)',
               }}
             />
           </div>
         ) : (
-          /* Single photo hero */
           <PhotoImage
             photo={couplePhotos[0]}
             className="ps-photo"
             style={{
-              width: 'min(85vw, 400px)',
-              height: 'min(70vh, 600px)',
+              width: 'min(86vw, 460px)',
+              height: 'min(74vh, 640px)',
               zIndex: 2,
-              boxShadow: '0 30px 60px rgba(79, 62, 57, 0.2)',
-              borderRadius: '8px',
+              borderRadius: '18px',
+              boxShadow: '0 34px 72px rgba(79, 62, 57, 0.18)',
             }}
           />
         )}
 
-        {/* Caption */}
-        <p className="ps-caption" style={{
-          position: 'absolute',
-          bottom: '6%',
-          fontFamily: "'Cormorant Garamond', serif",
-          fontStyle: 'italic',
-          fontWeight: 400,
-          fontSize: '1rem',
-          color: '#6A5148',
-          zIndex: 5,
-          opacity: 0,
-        }}>
-          Together.
-        </p>
+        <div
+          className="ps-caption"
+          style={{
+            position: 'absolute',
+            left: '1.25rem',
+            right: '1.25rem',
+            bottom: '5.5%',
+            zIndex: 4,
+            display: 'grid',
+            gap: '0.45rem',
+            justifyItems: 'start',
+          }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '0.6rem',
+              fontWeight: 500,
+              letterSpacing: '0.34em',
+              textTransform: 'uppercase',
+              color: 'rgba(133, 112, 105, 0.88)',
+              opacity: 0,
+            }}
+          >
+            Portraits
+          </p>
+          <p
+            style={{
+              maxWidth: 'min(72vw, 320px)',
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontSize: 'clamp(1.25rem, 5vw, 1.65rem)',
+              lineHeight: 1.28,
+              color: 'var(--color-text-dark)',
+              opacity: 0,
+            }}
+          >
+            The heart of the day is simply the two of us, held in light.
+          </p>
+        </div>
+
+        <div
+          className="ps-veil"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: 0,
+            background:
+              'linear-gradient(180deg, rgba(247,241,234,0) 0%, rgba(247,241,234,0.12) 52%, rgba(247,241,234,0.88) 100%)',
+            pointerEvents: 'none',
+          }}
+        />
       </div>
     </section>
   );
